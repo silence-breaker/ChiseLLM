@@ -1,0 +1,29 @@
+# Python dependencies for ChiseLLM project
+# Core dependencies for reflection environment
+
+# For subprocess management and system interaction
+psutil>=5.9.0
+
+# For structured logging
+colorlog>=6.7.0
+
+# For JSON handling and validation
+jsonschema>=4.17.0
+
+# For file operations
+pathlib2>=2.3.7
+
+# For future LLM integration (Stage 2)
+# torch>=2.0.0
+# transformers>=4.30.0
+# accelerate>=0.20.0
+
+# Development and testing
+pytest>=7.3.0
+pytest-cov>=4.1.0
+black>=23.0.0
+flake8>=6.0.0
+
+# Jupyter for experiments
+jupyter>=1.0.0
+ipython>=8.12.0

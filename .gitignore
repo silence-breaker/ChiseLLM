@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+venv/
+ENV/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+temp/
+*.tmp
+*.log
+
+# Scala/sbt
+target/
+project/target/
+project/project/
+.bsp/
+.metals/
+.bloop/
+
+# Verilog/Hardware
+*.v
+*.vcd
+*.fst
+*.out
+obj_dir/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# LLM Models (large files)
+*.bin
+*.safetensors
+models/
+checkpoints/
