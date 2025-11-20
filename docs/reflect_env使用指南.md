@@ -244,31 +244,67 @@ def reflect(
 
 ## 工作流程
 
+### 三阶段解耦设计
+
 ```
 你的代码字符串
     ↓
 创建临时目录
     ↓
-生成 build.sbt (配置 Chisel 6.0 + 编译器插件)
+┌─────────────────────────────────────────┐
+│ 阶段 1: Scala 编译                       │
+│ - 生成 build.sbt                         │
+│ - 生成 Scala 源文件                      │
+│ - 执行 sbt run                           │
+│ - 捕获编译错误                           │
+│ ❌ 失败 → stage="compilation"            │
+│ ✅ 成功 → 继续                           │
+└─────────────────────────────────────────┘
     ↓
-生成 Scala 源文件 (你的代码 + Harness)
+┌─────────────────────────────────────────┐
+│ 阶段 2: Chisel 阐述                      │
+│ - ChiselStage.emitSystemVerilog()       │
+│ - 生成 Verilog 文件                      │
+│ - 捕获 Chisel 运行时错误                 │
+│ ❌ 失败 → stage="elaboration"           │
+│ ✅ 成功 → 继续                           │
+└─────────────────────────────────────────┘
     ↓
-执行 sbt run
-    ├─ Scala 编译 (scalac)
-    └─ Chisel 阐述 (生成 Verilog)
+┌─────────────────────────────────────────┐
+│ 阶段 3: Verilator 仿真 (可选)            │
+│ - Verilator 编译 (Verilog → C++)        │
+│ - make 编译 C++ 代码                     │
+│ - 运行可执行文件                         │
+│ - 分析 testbench 输出                    │
+│ ❌ 失败 → stage="simulation"            │
+│ ✅ 成功 → stage="passed"                │
+└─────────────────────────────────────────┘
     ↓
-Verilator 编译 (Verilog → C++)
-    ↓
-编译 C++ (make)
-    ↓
-运行可执行文件 (testbench)
-    ↓
-分析输出 (查找 "TEST PASSED")
-    ↓
-返回测试报告
+返回结构化测试报告 (精确的错误定位)
     ↓
 删除临时目录
 ```
+
+### 为什么不用 ChiselTest?
+
+**ChiselTest 的问题**:
+```scala
+// ChiselTest: 一键运行,但错误混杂
+test(new MyModule) { dut =>
+  dut.io.out.expect(3.U)  // 失败时...
+}
+// 错误日志混合了: 编译信息 + 阐述信息 + 仿真信息
+// ❌ 无法程序化区分是哪个阶段失败
+```
+
+**我们的方案优势**:
+- ✅ 每个阶段独立执行和检查
+- ✅ 错误信息清晰分类: `{"stage": "compilation"}` vs `{"stage": "simulation"}`
+- ✅ LLM 可以精确知道问题在哪里
+- ✅ 便于实现针对性的修复策略
+
+**设计理念**:
+> 牺牲一点便利性,换取极致的错误反馈清晰度。这对 LLM 的自我修复循环至关重要。
 
 ## 详细使用示例
 
