@@ -31,13 +31,20 @@ from typing import Optional
 from datetime import datetime
 
 
+def _log(message: str, silent: bool = False):
+    """辅助函数: 条件性打印日志"""
+    if not silent:
+        print(message)
+
+
 def reflect(
     chisel_code_string: str, 
     module_name: str,
     testbench_path: Optional[str] = None,
     output_dir: Optional[str] = None,
     verilog_file: Optional[str] = None,
-    result_file: Optional[str] = None
+    result_file: Optional[str] = None,
+    silent: bool = False  # 新增: 静默模式开关
 ) -> dict:
     """
     反射函数: 接收 Chisel/Scala 代码字符串, 返回包含"体检报告"的字典。
@@ -49,6 +56,7 @@ def reflect(
         output_dir (str, optional): 输出目录路径(用于保存 Verilog 和日志)。如果为 None,不保存
         verilog_file (str, optional): Verilog 输出文件名(默认: "related_Verilog.v")
         result_file (str, optional): 结果 JSON 文件名(默认: "result.json")
+        silent (bool, optional): 是否启用静默模式(不打印进度信息)。默认 False
         
     Returns:
         dict: 体检报告,包含以下字段:
@@ -83,7 +91,7 @@ def reflect(
         try:
             # --- 步骤 1: 编译与阐述 ---
             verilog_file_path = run_compile_and_elaborate(
-                temp_dir, chisel_code_string, module_name, result
+                temp_dir, chisel_code_string, module_name, result, silent
             )
             
             # 如果编译或阐述失败,提前返回
@@ -91,14 +99,14 @@ def reflect(
                 # 保存结果到输出目录(如果指定)
                 if output_dir:
                     result_path = _save_results(result, output_dir, result_file)
-                    print(f"✗ 失败于阶段: {result['stage']}")
-                    print(f"✓ 日志已保存到: {result_path}")
+                    _log(f"✗ 失败于阶段: {result['stage']}", silent)
+                    _log(f"✓ 日志已保存到: {result_path}", silent)
                 return result
             
             # 如果成功阐述,保存 Verilog 文件
             if output_dir and result["elaborated"]:
                 verilog_path = _save_verilog(result["generated_verilog"], output_dir, verilog_file)
-                print(f"✓ Verilog 已保存到: {verilog_path}")
+                _log(f"✓ Verilog 已保存到: {verilog_path}", silent)
             
             # --- 步骤 2: 仿真 (可选) ---
             # 只有提供了 testbench 才执行仿真
@@ -108,12 +116,12 @@ def reflect(
                     result["stage"] = "simulation"
                 else:
                     run_simulation(temp_dir, verilog_file_path, module_name, 
-                                 testbench_path, result)
+                                 testbench_path, result, silent)
                     result["stage"] = "passed" if result["sim_passed"] else "simulation"
             else:
                 # 没有 testbench,仿真阶段跳过
                 result["stage"] = "passed"
-                print("ℹ 未提供 testbench,跳过仿真阶段")
+                _log("ℹ 未提供 testbench,跳过仿真阶段", silent)
             
         except Exception as e:
             result["error_log"] = f"Python Exception: {str(e)}"
@@ -126,7 +134,7 @@ def reflect(
             # 保存结果到输出目录(如果指定)
             if output_dir:
                 result_path = _save_results(result, output_dir, result_file)
-                print(f"✓ 测试报告已保存到: {result_path}")
+                _log(f"✓ 测试报告已保存到: {result_path}", silent)
     
     return result
 
@@ -135,7 +143,8 @@ def run_compile_and_elaborate(
     temp_dir: str, 
     code_str: str, 
     module_name: str,
-    result_dict: dict
+    result_dict: dict,
+    silent: bool = False
 ) -> Optional[str]:
     """
     步骤 1: 编译和阐述 Chisel 代码
@@ -213,15 +222,28 @@ object VerilogEmitter extends App {{
     stderr_log = os.path.join(temp_dir, 'sbt_stderr.log')
     
     # 设置环境变量,避免sbt权限问题
+    # 优化: 使用用户主目录下的缓存，而不是每次都在 temp_dir 重新下载
+    # 这样可以显著加速后续的编译过程
+    user_home = os.path.expanduser("~")
+    sbt_cache_dir = os.path.join(user_home, ".cache", "sbt_chisel_llm")
+    os.makedirs(sbt_cache_dir, exist_ok=True)
+    
     env = os.environ.copy()
-    env['SBT_OPTS'] = f'-Dsbt.global.base={temp_dir}/.sbt -Dsbt.boot.directory={temp_dir}/.sbt/boot -Dsbt.ivy.home={temp_dir}/.ivy2 -Djava.io.tmpdir={temp_dir}/tmp -Dsbt.server.forcestart=false'
+    # 使用共享的 boot 和 ivy 目录，但保持 global.base 和 project 独立
+    env['SBT_OPTS'] = (
+        f'-Dsbt.global.base={temp_dir}/.sbt '
+        f'-Dsbt.boot.directory={sbt_cache_dir}/boot '
+        f'-Dsbt.ivy.home={sbt_cache_dir}/ivy2 '
+        f'-Djava.io.tmpdir={temp_dir}/tmp '
+        f'-Dsbt.server.forcestart=false'
+    )
     env['XDG_RUNTIME_DIR'] = f'{temp_dir}/runtime'
     
     # 创建必要的目录
     os.makedirs(os.path.join(temp_dir, 'tmp'), exist_ok=True)
     os.makedirs(os.path.join(temp_dir, 'runtime'), exist_ok=True)
     
-    print("⏳ 编译和阐述中...")
+    _log("⏳ 编译和阐述中...", silent)
     
     with open(stdout_log, 'w') as f_out, open(stderr_log, 'w') as f_err:
         try:
@@ -248,15 +270,15 @@ object VerilogEmitter extends App {{
             result_dict["compiled"] = False
             result_dict["stage"] = "compilation"
             result_dict["error_log"] = f"Compilation Error:\n{stderr_content}"
-            print("✗ 编译失败")
+            _log("✗ 编译失败", silent)
         else:
             # 编译通过,但 Chisel 阐述失败
             result_dict["compiled"] = True
             result_dict["elaborated"] = False
             result_dict["stage"] = "elaboration"
             result_dict["error_log"] = f"Elaboration Error:\n{stderr_content}"
-            print("✓ 编译成功")
-            print("✗ 阐述失败")
+            _log("✓ 编译成功", silent)
+            _log("✗ 阐述失败", silent)
         
         return None
     
@@ -265,8 +287,8 @@ object VerilogEmitter extends App {{
     result_dict["elaborated"] = True
     result_dict["stage"] = "elaboration"
     
-    print("✓ 编译成功")
-    print("✓ 阐述成功")
+    _log("✓ 编译成功", silent)
+    _log("✓ 阐述成功", silent)
     
     # 读取生成的 Verilog 文件
     verilog_file = os.path.join(temp_dir, "generated_verilog", f"{module_name}.v")
@@ -286,7 +308,8 @@ def run_simulation(
     verilog_file_path: str, 
     module_name: str,
     testbench_path: str,
-    result_dict: dict
+    result_dict: dict,
+    silent: bool = False
 ) -> None:
     """
     步骤 2: 使用 Verilator 编译和运行 C++ testbench
@@ -312,7 +335,7 @@ def run_simulation(
     tb_dest_path = os.path.join(temp_dir, tb_filename)
     shutil.copy(testbench_path, tb_dest_path)
     
-    print("⏳ Verilator 编译中...")
+    _log("⏳ Verilator 编译中...", silent)
     
     # 2. 运行 Verilator (Verilog -> C++)
     verilator_cmd = [
@@ -335,11 +358,11 @@ def run_simulation(
     
     if process.returncode != 0:
         result_dict["error_log"] = f"Verilator Error:\n{process.stderr}"
-        print("✗ Verilator 编译失败")
+        _log("✗ Verilator 编译失败", silent)
         return
     
-    print("✓ Verilator 编译成功")
-    print("⏳ C++ 编译中...")
+    _log("✓ Verilator 编译成功", silent)
+    _log("⏳ C++ 编译中...", silent)
     
     # 3. 编译 C++ (使用 make)
     obj_dir = os.path.join(temp_dir, "obj_dir")
@@ -360,11 +383,11 @@ def run_simulation(
     
     if process.returncode != 0:
         result_dict["error_log"] = f"Make Error:\n{process.stderr}"
-        print("✗ C++ 编译失败")
+        _log("✗ C++ 编译失败", silent)
         return
     
-    print("✓ C++ 编译成功")
-    print("⏳ 运行仿真...")
+    _log("✓ C++ 编译成功", silent)
+    _log("⏳ 运行仿真...", silent)
     
     # 4. 运行可执行文件
     exe_path = os.path.join(obj_dir, f"V{module_name}")
@@ -380,18 +403,18 @@ def run_simulation(
     if process.returncode != 0:
         result_dict["error_log"] = f"Simulation Runtime Error:\n{process.stderr}"
         result_dict["sim_passed"] = False
-        print("✗ 仿真运行时错误")
+        _log("✗ 仿真运行时错误", silent)
         return
     
     # 5. 检查 testbench 输出
     sim_output = process.stdout
     if "TEST PASSED" in sim_output or "PASS" in sim_output:
         result_dict["sim_passed"] = True
-        print("✓ 仿真测试通过")
+        _log("✓ 仿真测试通过", silent)
     else:
         result_dict["sim_passed"] = False
         result_dict["error_log"] = f"Simulation Test Failed:\n{sim_output}"
-        print("✗ 仿真测试失败")
+        _log("✗ 仿真测试失败", silent)
 
 
 def _read_logs(temp_dir: str, result_dict: dict) -> None:
