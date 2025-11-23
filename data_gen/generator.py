@@ -416,13 +416,14 @@ def main():
             })
                 
             if len(valid_dataset) >= TARGET_COUNT:
+                # 达到目标后立即终止进程池，避免等待剩余任务
+                pool.terminate()
                 break
     except KeyboardInterrupt:
         print("\n⚠️ 用户中断，正在保存已生成的数据...")
         pool.terminate()
     finally:
-        pool.close()
-        pool.join()
+        pool.join()  # 等待所有子进程真正退出（释放资源）
         pbar.close()
     
     output_dir = os.path.join(parent_dir, "dataset")
