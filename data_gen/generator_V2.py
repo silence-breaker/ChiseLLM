@@ -160,15 +160,15 @@ import chisel3._
 
 class {{ module_name }} extends Module {
   val io = IO(new Bundle {
-    val out = Output({{ type_class }}({{ width }}.W))
+    val out = Output({{ type_class }}({% if type_class != 'Bool' %}{{ width }}.W{% endif %}))
   })
   // Task: Define a {{ type_class }} {{ kind }} named '{{ var_name }}'
-  val {{ var_name }} = {{ kind }}({{ type_class }}({{ width }}.W))
+  val {{ var_name }} = {{ kind }}({{ type_class }}({% if type_class != 'Bool' %}{{ width }}.W{% endif %}))
   
   {% if kind == "Reg" %}
-  {{ var_name }} := 0.U.asTypeOf({{ var_name }})
+  {{ var_name }} := {% if type_class == 'Bool' %}false.B{% else %}0.U.asTypeOf({{ var_name }}){% endif %}
   {% elif kind == "Wire" %}
-  {{ var_name }} := 0.U.asTypeOf({{ var_name }})
+  {{ var_name }} := {% if type_class == 'Bool' %}false.B{% else %}0.U.asTypeOf({{ var_name }}){% endif %}
   {% endif %}
 
   io.out := {{ var_name }}
