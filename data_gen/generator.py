@@ -347,7 +347,6 @@ def worker_task(args):
         return None
 
 def main():
-    # 强制 Python 使用无缓冲输出 (兼容性写法)
     try:
         if hasattr(sys.stdout, 'reconfigure'):
             sys.stdout.reconfigure(line_buffering=True)  # type: ignore
