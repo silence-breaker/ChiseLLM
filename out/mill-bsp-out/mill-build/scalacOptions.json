@@ -1,0 +1,8 @@
+{
+    "value": [
+        "-deprecation",
+        "-Wconf:msg=will be encoded on the classpath:silent"
+    ],
+    "valueHash": 232656031,
+    "inputsHash": 179590885
+}

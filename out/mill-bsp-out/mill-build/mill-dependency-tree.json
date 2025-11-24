@@ -1,0 +1,16 @@
+{
+  "Task.Anon@738449b7(mill.javalib.bsp.BspJavaModule#bspBuildTargetInverseSources)": {
+    "allSourceFiles": {
+      "generatedScriptSources": {
+        "parseBuildFiles": {}
+      },
+      "scriptSources": {}
+    },
+    "allSources": {
+      "sources": {
+        "sources.super.javalib.JavaModule": {}
+      },
+      "generatedSources": {}
+    }
+  }
+}

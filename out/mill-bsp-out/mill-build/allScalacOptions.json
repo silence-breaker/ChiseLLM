@@ -1,0 +1,9 @@
+{
+    "value": [
+        "-Xplugin:/home/silence_breaker/.cache/coursier/v1/https/repo1.maven.org/maven2/com/lihaoyi/scalac-mill-moduledefs-plugin_3.7.3/0.11.10/scalac-mill-moduledefs-plugin_3.7.3-0.11.10.jar",
+        "-deprecation",
+        "-Wconf:msg=will be encoded on the classpath:silent"
+    ],
+    "valueHash": -851791635,
+    "inputsHash": 992478108
+}

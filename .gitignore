@@ -40,13 +40,15 @@ temp/
 *.tmp
 *.log
 
-# Scala/sbt
+# Scala/sbt/Mill
 target/
 project/target/
 project/project/
 .bsp/
 .metals/
 .bloop/
+out/  # Mill 构建输出目录
+.mill-version
 
 # Verilog/Hardware
 *.v

@@ -1,0 +1,15 @@
+{
+    "value": {
+        "seenScripts": [
+            [
+                "/home/silence_breaker/git/ChiseLLM/build.sc",
+                "import mill._\nimport mill.scalalib._\n\n/**\n * ChiseLLM 项目 - Mill 构建配置\n * \n * 这个配置文件帮助 IDE (如 VS Code + Metals) 正确识别 Chisel 依赖\n */\nobject chiselllm extends ScalaModule {\n  def scalaVersion = \"2.13.12\"\n  \n  // Chisel 依赖\n  override def ivyDeps = Agg(\n    ivy\"org.chipsalliance::chisel:6.0.0\"\n  )\n  \n  // Scala 编译选项\n  override def scalacOptions = Seq(\n    \"-Xsource:2.13\",\n    \"-language:reflectiveCalls\",\n    \"-deprecation\",\n    \"-feature\",\n    \"-Xcheckinit\",\n    \"-encoding\", \"utf-8\"\n  )\n  \n  // Chisel 编译器插件\n  override def scalacPluginIvyDeps = Agg(\n    ivy\"org.chipsalliance:::chisel-plugin:6.0.0\"\n  )\n}"
+            ]
+        ],
+        "errors": [],
+        "buildFile": "build.sc",
+        "headerData": ""
+    },
+    "valueHash": -32665605,
+    "inputsHash": 1370929413
+}

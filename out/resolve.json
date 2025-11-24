@@ -1,0 +1,19 @@
+{
+    "value": [
+        "chiselllm",
+        "clean",
+        "init",
+        "inspect",
+        "path",
+        "plan",
+        "resolve",
+        "show",
+        "showNamed",
+        "shutdown",
+        "version",
+        "visualize",
+        "visualizePlan"
+    ],
+    "valueHash": 1683746505,
+    "inputsHash": -1646508160
+}
