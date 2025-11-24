@@ -1,5 +1,5 @@
 """
-ChiseLLM 反射环境 (Reflection Environment) v2.0
+ChiseLLM 反射环境 (Reflection Environment) v2.1
 
 这个模块实现了核心的 reflect() 函数,用于自动化测试 LLM 生成的 Chisel 代码。
 
@@ -10,14 +10,20 @@ ChiseLLM 反射环境 (Reflection Environment) v2.0
 4. 自动仿真 (Verilator simulation with C++ testbench)
 5. 返回详细的"体检报告"并保存到文件
 
-新特性 (v2.0):
+新特性 (v2.1):
+- ⚡ 使用 Mill 构建工具替代 sbt (更快、更现代)
 - 支持自定义模块名称
 - 支持自定义 testbench 路径
 - 自动保存 Verilog 到 tests/related_Verilog.v
 - 自动保存详细日志到 tests/result.json
 
+Mill vs sbt 对比:
+- Mill 编译速度更快 (特别是增量编译)
+- Mill 配置更简洁 (build.sc vs build.sbt)
+- Mill 是 Scala 社区推荐的现代构建工具
+
 作者: ChiseLLM Project
-日期: 2025-11-16
+日期: 2025-11-24
 """
 
 import subprocess
@@ -147,12 +153,12 @@ def run_compile_and_elaborate(
     silent: bool = False
 ) -> Optional[str]:
     """
-    步骤 1: 编译和阐述 Chisel 代码
+    步骤 1: 编译和阐述 Chisel 代码 (使用 Mill 构建工具)
     
     这个函数会:
-    1. 创建一个最小的 sbt 项目结构
+    1. 创建一个最小的 Mill 项目结构 (build.sc)
     2. 将用户代码包装在一个 harness 中
-    3. 执行 sbt run 来编译和阐述代码
+    3. 执行 mill chiselmodule.run 来编译和阐述代码
     4. 分析结果,区分编译错误和阐述错误
     
     Args:
@@ -160,6 +166,7 @@ def run_compile_and_elaborate(
         code_str (str): 用户的 Chisel 代码
         module_name (str): 模块名称
         result_dict (dict): 结果字典 (会被修改)
+        silent (bool): 是否静默模式
         
     Returns:
         str: 成功时返回 Verilog 文件路径; 失败时返回 None
@@ -167,21 +174,36 @@ def run_compile_and_elaborate(
     
     result_dict["stage"] = "compilation"
     
-    # 1. 创建 build.sbt (定义 Chisel 依赖)
-    build_sbt_content = """scalaVersion := "2.13.12"
+    # 1. 创建 build.sc (定义 Chisel 依赖 - Mill 构建配置)
+    build_sc_content = """import mill._
+import mill.scalalib._
 
-libraryDependencies ++= Seq(
-  "org.chipsalliance" %% "chisel" % "6.0.0"
-)
-
-// 添加 Chisel 编译器插件
-addCompilerPlugin("org.chipsalliance" % "chisel-plugin" % "6.0.0" cross CrossVersion.full)
+object chiselmodule extends ScalaModule {
+  def scalaVersion = "2.13.12"
+  
+  def ivyDeps = Agg(
+    ivy"org.chipsalliance::chisel:6.0.0"
+  )
+  
+  def scalacOptions = Seq(
+    "-Xsource:2.13",
+    "-language:reflectiveCalls",
+    "-deprecation",
+    "-feature",
+    "-Xcheckinit"
+  )
+  
+  def scalacPluginIvyDeps = Agg(
+    ivy"org.chipsalliance:::chisel-plugin:6.0.0"
+  )
+}
 """
-    with open(os.path.join(temp_dir, "build.sbt"), "w") as f:
-        f.write(build_sbt_content)
+    with open(os.path.join(temp_dir, "build.sc"), "w") as f:
+        f.write(build_sc_content)
     
-    # 2. 创建标准的 sbt 项目目录结构
-    scala_dir = os.path.join(temp_dir, "src", "main", "scala")
+    # 2. 创建标准的 Mill 项目目录结构
+    # Mill 默认使用 <module>/src/ 作为源码目录
+    scala_dir = os.path.join(temp_dir, "chiselmodule", "src")
     os.makedirs(scala_dir, exist_ok=True)
     
     # 3. 创建 Scala 源文件 (用户代码 + Harness)
@@ -217,46 +239,38 @@ object VerilogEmitter extends App {{
     with open(scala_file_path, "w") as f:
         f.write(scala_code_content)
     
-    # 4. 执行 sbt run (编译 + 阐述)
-    stdout_log = os.path.join(temp_dir, 'sbt_stdout.log')
-    stderr_log = os.path.join(temp_dir, 'sbt_stderr.log')
+    # 4. 执行 mill run (编译 + 阐述)
+    stdout_log = os.path.join(temp_dir, 'mill_stdout.log')
+    stderr_log = os.path.join(temp_dir, 'mill_stderr.log')
     
-    # 设置环境变量,避免sbt权限问题
-    # 优化: 使用用户主目录下的缓存，而不是每次都在 temp_dir 重新下载
-    # 这样可以显著加速后续的编译过程
+    # 设置环境变量,配置 Mill 缓存
+    # Mill 的缓存机制更简洁，默认使用 ~/.cache/mill 和项目目录下的 out/
+    # 优化: 使用用户主目录下的缓存，避免重复下载依赖
     user_home = os.path.expanduser("~")
-    sbt_cache_dir = os.path.join(user_home, ".cache", "sbt_chisel_llm")
-    os.makedirs(sbt_cache_dir, exist_ok=True)
+    mill_cache_dir = os.path.join(user_home, ".cache", "mill")
+    os.makedirs(mill_cache_dir, exist_ok=True)
     
     env = os.environ.copy()
-    # 使用共享的 boot 和 ivy 目录，但保持 global.base 和 project 独立
-    env['SBT_OPTS'] = (
-        f'-Dsbt.global.base={temp_dir}/.sbt '
-        f'-Dsbt.boot.directory={sbt_cache_dir}/boot '
-        f'-Dsbt.ivy.home={sbt_cache_dir}/ivy2 '
-        f'-Djava.io.tmpdir={temp_dir}/tmp '
-        f'-Dsbt.server.forcestart=false'
-    )
-    env['XDG_RUNTIME_DIR'] = f'{temp_dir}/runtime'
+    # Mill 使用 COURSIER_CACHE 来配置依赖缓存位置
+    env['COURSIER_CACHE'] = mill_cache_dir
+    env['MILL_WORKSPACE_DIR'] = temp_dir
+    # 避免交互式提示
+    env['CI'] = 'true'
     
-    # 创建必要的目录
-    os.makedirs(os.path.join(temp_dir, 'tmp'), exist_ok=True)
-    os.makedirs(os.path.join(temp_dir, 'runtime'), exist_ok=True)
-    
-    _log("⏳ 编译和阐述中...", silent)
+    _log("⏳ 编译和阐述中 (使用 Mill)...", silent)
     
     with open(stdout_log, 'w') as f_out, open(stderr_log, 'w') as f_err:
         try:
             process = subprocess.run(
-                ["sbt", "run"],
+                ["mill", "chiselmodule.run"],
                 cwd=temp_dir,
                 stdout=f_out,
                 stderr=f_err,
                 env=env,
-                timeout=180  # 180秒超时(第一次运行需要下载依赖)
+                timeout=120  # 120秒超时(Mill 比 sbt 更快，第一次运行需要下载依赖)
             )
         except subprocess.TimeoutExpired:
-            result_dict["error_log"] = "Compilation timeout (exceeded 180 seconds)"
+            result_dict["error_log"] = "Compilation timeout (exceeded 120 seconds)"
             return None
     
     # 5. 分析结果
@@ -427,7 +441,7 @@ def _read_logs(temp_dir: str, result_dict: dict) -> None:
     """
     # 读取 stderr 日志
     try:
-        stderr_log = os.path.join(temp_dir, 'sbt_stderr.log')
+        stderr_log = os.path.join(temp_dir, 'mill_stderr.log')
         with open(stderr_log, 'r') as f:
             result_dict['full_stderr'] = f.read()
     except IOError:
@@ -435,7 +449,7 @@ def _read_logs(temp_dir: str, result_dict: dict) -> None:
     
     # 读取 stdout 日志
     try:
-        stdout_log = os.path.join(temp_dir, 'sbt_stdout.log')
+        stdout_log = os.path.join(temp_dir, 'mill_stdout.log')
         with open(stdout_log, 'r') as f:
             result_dict['full_stdout'] = f.read()
     except IOError:
