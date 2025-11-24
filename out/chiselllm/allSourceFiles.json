@@ -1,5 +1,8 @@
 {
-    "value": [],
-    "valueHash": 1467096776,
-    "inputsHash": 411506191
+    "value": [
+        "ref:v0:c0c03e62:/home/silence_breaker/git/ChiseLLM/tests/test_reg_syntax.scala",
+        "ref:v0:abcb1632:/home/silence_breaker/git/ChiseLLM/tests/ten_timer.scala"
+    ],
+    "valueHash": 1470682149,
+    "inputsHash": -1121035161
 }

@@ -121,8 +121,14 @@ def reflect(
                     result["error_log"] = f"Testbench file not found: {testbench_path}"
                     result["stage"] = "simulation"
                 else:
-                    run_simulation(temp_dir, verilog_file_path, module_name, 
-                                 testbench_path, result, silent)
+                    run_simulation(
+                        temp_dir,
+                        verilog_file_path,
+                        module_name,
+                        testbench_path,
+                        result,
+                        silent,
+                    )
                     result["stage"] = "passed" if result["sim_passed"] else "simulation"
             else:
                 # 没有 testbench,仿真阶段跳过

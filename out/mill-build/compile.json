@@ -1,8 +1,8 @@
 {
     "value": {
         "analysisFile": "/home/silence_breaker/git/ChiseLLM/out/mill-build/compile.dest/zinc",
-        "classes": "ref:v0:b6ad4996:/home/silence_breaker/git/ChiseLLM/out/mill-build/compile.dest/classes"
+        "classes": "ref:v0:788f6671:/home/silence_breaker/git/ChiseLLM/out/mill-build/compile.dest/classes"
     },
-    "valueHash": 609656613,
-    "inputsHash": -203416306
+    "valueHash": 1595768666,
+    "inputsHash": 1708874500
 }

@@ -1,16 +1,26 @@
 {
-  "Task.Anon@738449b7(mill.javalib.bsp.BspJavaModule#bspBuildTargetInverseSources)": {
-    "allSourceFiles": {
-      "generatedScriptSources": {
-        "parseBuildFiles": {}
-      },
-      "scriptSources": {}
+  "Task.Anon@79eecafd(mill.javalib.JavaModule#bspCompileClasspath)": {
+    "localCompileClasspath": {
+      "compileResources": {},
+      "unmanagedClasspath": {}
     },
-    "allSources": {
-      "sources": {
-        "sources.super.javalib.JavaModule": {}
+    "resolvedMvnDeps": {
+      "scalaVersion": {},
+      "mandatoryMvnDeps": {},
+      "mill.javalib.CoursierConfigModule.coursierEnv": {},
+      "depManagement": {},
+      "artifactTypes": {},
+      "checkGradleModules": {},
+      "compileMvnDeps": {},
+      "repositories": {},
+      "transitiveCoursierProjects": {},
+      "runMvnDeps": {
+        "cliImports": {}
       },
-      "generatedSources": {}
+      "mvnDeps": {},
+      "scalaOrganization": {},
+      "bomMvnDeps": {},
+      "platformSuffix": {}
     }
   }
 }

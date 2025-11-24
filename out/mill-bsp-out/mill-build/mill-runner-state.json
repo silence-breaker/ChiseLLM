@@ -1,15 +1,15 @@
 {
     "workerCache": {
         "mill.javalib.JvmWorkerModule.internalWorker": {
-            "identityHashCode": 1724091985,
+            "identityHashCode": 736868175,
             "inputHash": -418944403
         }
     },
     "evalWatched": [
-        "/home/silence_breaker/git/ChiseLLM/mill-build/resources",
-        "/home/silence_breaker/git/ChiseLLM/build.sc",
+        "/home/silence_breaker/git/ChiseLLM/mill-build/src",
         "/home/silence_breaker/git/ChiseLLM/mill-build/compile-resources",
-        "/home/silence_breaker/git/ChiseLLM/mill-build/src"
+        "/home/silence_breaker/git/ChiseLLM/build.sc",
+        "/home/silence_breaker/git/ChiseLLM/mill-build/resources"
     ],
     "moduleWatched": [],
     "classLoaderIdentity": null,

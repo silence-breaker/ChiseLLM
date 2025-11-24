@@ -1,8 +1,13 @@
 {
     "value": [
         "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/out/chiselllm",
-        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/out/mill"
+        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/out/clean.json",
+        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/out/clean.log",
+        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/out/mill",
+        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/out/resolve.json",
+        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/out/resolve.log",
+        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/out/show.json"
     ],
-    "valueHash": 1239435827,
-    "inputsHash": -1646508160
+    "valueHash": -1737768948,
+    "inputsHash": 1760596612
 }

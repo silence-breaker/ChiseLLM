@@ -1,14 +1,11 @@
 {
     "workerCache": {
         "mill.scalalib.ZincWorkerModule.worker": {
-            "identityHashCode": 187099259,
-            "inputHash": -1376973311
+            "identityHashCode": 512239832,
+            "inputHash": 1790059547
         }
     },
-    "evalWatched": [
-        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/chiselllm/compile-resources",
-        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/chiselllm/src"
-    ],
+    "evalWatched": [],
     "moduleWatched": [],
     "scriptImportGraph": [],
     "classLoaderIdentity": [],

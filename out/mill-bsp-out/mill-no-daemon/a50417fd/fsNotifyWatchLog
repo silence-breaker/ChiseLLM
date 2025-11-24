@@ -28,8 +28,6 @@
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.mv.db
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.mv.db
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
@@ -106,8 +104,6 @@
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
@@ -122,8 +118,18 @@
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/tests/ten_timer.scala
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/tests/ten_timer.scala
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
@@ -132,44 +138,6 @@
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
 /home/silence_breaker/git/ChiseLLM/.git/index
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-ck
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
@@ -207,31 +175,43 @@ ck
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-me-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/clean.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/clean.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/clean.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-runner-state.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-runner-state.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
+/home/silence_breaker/git/ChiseLLM/.git/index
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
@@ -241,17 +221,12 @@ me-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
@@ -266,7 +241,6 @@ me-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
@@ -275,11 +249,16 @@ me-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
@@ -297,6 +276,44 @@ me-profile.json
 /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
@@ -315,19 +332,6 @@ me-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-/home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
@@ -337,48 +341,45 @@ me-profile.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-runner-state.json
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
+/home/silence_breaker/git/ChiseLLM/.git/index
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.bsp/mill-bsp.json
+/home/silence_breaker/git/ChiseLLM/.bsp/mill-bsp-0.11.6.resources
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals
+/home/silence_breaker/git/ChiseLLM/.metals/metals.mv.db
+/home/silence_breaker/git/ChiseLLM/.metals/mill
+/home/silence_breaker/git/ChiseLLM/.bsp
+/home/silence_breaker/git/ChiseLLM/.metals/metals.lock.db
+/home/silence_breaker/git/ChiseLLM/.metals/metals.log
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[filter] (shouldBeWatched=false) /home/silence_breaker/git/ChiseLLM/.bsp
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.bsp
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.bsp/mill-bsp.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.bsp/mill-bsp.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-runner-state.json
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-runner-state.json
+[filter] (shouldBeWatched=false) /home/silence_breaker/git/ChiseLLM/.metals
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.lock.db
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
+/home/silence_breaker/git/ChiseLLM/.git/index
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
+[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.lock.db
+seLLM/build.sc
 [changed-paths] (hasWatchedPath=true) /home/silence_breaker/git/ChiseLLM/build.sc
-[changed-paths] (hasWatchedPath=true) /home/silence_breaker/git/ChiseLLM/build.sc
-e.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[filter] (shouldBeWatched=false) /home/silence_breaker/git/ChiseLLM/out/chiselllm/compile.dest
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/chiselllm/compile.dest
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/chiselllm/compile.dest/zinc
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/chiselllm/compile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/chiselllm/compile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-chrome-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-profile.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-runner-state.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/out/mill-runner-state.json
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.git/index.lock
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
-[changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
+hiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log
 [changed-paths] (hasWatchedPath=false) /home/silence_breaker/git/ChiseLLM/.metals/metals.log

@@ -32,12 +32,12 @@ object chiselllm extends ScalaModule {
   def scalaVersion = "2.13.12"
   
   // Chisel 依赖
-  override def ivyDeps = Agg(
+  def ivyDeps = Agg(
     ivy"org.chipsalliance::chisel:6.0.0"
   )
   
   // Scala 编译选项
-  override def scalacOptions = Seq(
+  def scalacOptions = Seq(
     "-Xsource:2.13",
     "-language:reflectiveCalls",
     "-deprecation",
@@ -47,8 +47,13 @@ object chiselllm extends ScalaModule {
   )
   
   // Chisel 编译器插件
-  override def scalacPluginIvyDeps = Agg(
+  def scalacPluginIvyDeps = Agg(
     ivy"org.chipsalliance:::chisel-plugin:6.0.0"
+  )
+  
+  // 自定义源目录: 指向项目根目录下的 tests/ (包含所有示例模块)
+  override def sources = T.sources(
+    os.pwd / "tests"
   )
 }
 
