@@ -1,7 +1,7 @@
 {
     "workerCache": {
         "mill.javalib.JvmWorkerModule.internalWorker": {
-            "identityHashCode": 658563862,
+            "identityHashCode": 1238047663,
             "inputHash": -418944403
         }
     },
@@ -12,7 +12,7 @@
         "/home/silence_breaker/git/ChiseLLM/mill-build/resources"
     ],
     "moduleWatched": [],
-    "classLoaderIdentity": -1744904891,
+    "classLoaderIdentity": -1792872851,
     "runClasspath": [
         [
             "/home/silence_breaker/.cache/coursier/v1/https/repo1.maven.org/maven2/com/lihaoyi/mill-libs_3/1.0.6/mill-libs_3-1.0.6.jar",
