@@ -4,14 +4,19 @@ import mill.scalalib._
 /**
  * ChiseLLM 项目 - Mill 构建配置
  * 
- * 这个配置文件帮助 IDE (如 VS Code + Metals) 正确识别 Chisel 依赖
+ * 注意: 此文件仅供 reflect_env.py 内部使用，不用于 IDE 集成。
+ * 请使用 `python src/run_reflect.py` 进行编译和验证。
+ * 
+ * 技术栈版本 (与数据集保持一致):
+ *   - Scala: 2.13.12
+ *   - Chisel: 6.0.0
  */
 object chiselllm extends ScalaModule {
   def scalaVersion = "2.13.12"
   
-  // Chisel 依赖
-  def ivyDeps = Agg(
-    ivy"org.chipsalliance::chisel:6.0.0"
+  // Chisel 依赖 (Mill 1.x 语法)
+  def mvnDeps = Seq(
+    mvn"org.chipsalliance::chisel:6.0.0"
   )
   
   // Scala 编译选项
@@ -20,17 +25,14 @@ object chiselllm extends ScalaModule {
     "-language:reflectiveCalls",
     "-deprecation",
     "-feature",
-    "-Xcheckinit",
-    "-encoding", "utf-8"
+    "-Xcheckinit"
   )
   
   // Chisel 编译器插件
-  def scalacPluginIvyDeps = Agg(
-    ivy"org.chipsalliance:::chisel-plugin:6.0.0"
+  def scalacPluginMvnDeps = Seq(
+    mvn"org.chipsalliance:::chisel-plugin:6.0.0"
   )
   
-  // 自定义源目录: 指向项目根目录下的 tests/ (包含所有示例模块)
-  override def sources = T.sources(
-    os.pwd / "tests"
-  )
+  // 源目录
+  def sources = Task.Sources(os.pwd / "tests")
 }

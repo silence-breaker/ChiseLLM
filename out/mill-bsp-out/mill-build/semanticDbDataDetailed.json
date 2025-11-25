@@ -1,0 +1,11 @@
+{
+    "value": {
+        "compilationResult": {
+            "analysisFile": "/home/silence_breaker/git/ChiseLLM/out/mill-bsp-out/mill-build/semanticDbDataDetailed.dest/zinc",
+            "classes": "ref:v0:88b0c526:/home/silence_breaker/git/ChiseLLM/out/mill-bsp-out/mill-build/semanticDbDataDetailed.dest/classes"
+        },
+        "semanticDbFiles": "ref:v0:b381aee3:/home/silence_breaker/git/ChiseLLM/out/mill-bsp-out/mill-build/semanticDbDataDetailed.dest/data"
+    },
+    "valueHash": -695284155,
+    "inputsHash": -1331717431
+}

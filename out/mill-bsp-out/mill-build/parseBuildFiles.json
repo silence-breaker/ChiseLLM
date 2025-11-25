@@ -3,13 +3,13 @@
         "seenScripts": [
             [
                 "/home/silence_breaker/git/ChiseLLM/build.sc",
-                "import mill._\nimport mill.scalalib._\n\n/**\n * ChiseLLM 项目 - Mill 构建配置\n * \n * 这个配置文件帮助 IDE (如 VS Code + Metals) 正确识别 Chisel 依赖\n */\nobject chiselllm extends ScalaModule {\n  def scalaVersion = \"2.13.12\"\n  \n  // Chisel 依赖\n  def ivyDeps = Agg(\n    ivy\"org.chipsalliance::chisel:6.0.0\"\n  )\n  \n  // Scala 编译选项\n  def scalacOptions = Seq(\n    \"-Xsource:2.13\",\n    \"-language:reflectiveCalls\",\n    \"-deprecation\",\n    \"-feature\",\n    \"-Xcheckinit\",\n    \"-encoding\", \"utf-8\"\n  )\n  \n  // Chisel 编译器插件\n  def scalacPluginIvyDeps = Agg(\n    ivy\"org.chipsalliance:::chisel-plugin:6.0.0\"\n  )\n  \n  // 自定义源目录: 指向项目根目录下的 tests/ (包含所有示例模块)\n  override def sources = T.sources(\n    os.pwd / \"tests\"\n  )\n}"
+                "import mill._\nimport mill.scalalib._\n\n/**\n * ChiseLLM 项目 - Mill 构建配置\n * \n * 注意: 此文件仅供 reflect_env.py 内部使用，不用于 IDE 集成。\n * 请使用 `python src/run_reflect.py` 进行编译和验证。\n * \n * 技术栈版本 (与数据集保持一致):\n *   - Scala: 2.13.12\n *   - Chisel: 6.0.0\n */\nobject chiselllm extends ScalaModule {\n  def scalaVersion = \"2.13.12\"\n  \n  // Chisel 依赖 (Mill 1.x 语法)\n  def mvnDeps = Seq(\n    mvn\"org.chipsalliance::chisel:6.0.0\"\n  )\n  \n  // Scala 编译选项\n  def scalacOptions = Seq(\n    \"-Xsource:2.13\",\n    \"-language:reflectiveCalls\",\n    \"-deprecation\",\n    \"-feature\",\n    \"-Xcheckinit\"\n  )\n  \n  // Chisel 编译器插件\n  def scalacPluginMvnDeps = Seq(\n    mvn\"org.chipsalliance:::chisel-plugin:6.0.0\"\n  )\n  \n  // 源目录\n  def sources = Task.Sources(os.pwd / \"tests\")\n}"
             ]
         ],
         "errors": [],
         "buildFile": "build.sc",
         "headerData": ""
     },
-    "valueHash": -1095876966,
-    "inputsHash": 1174531099
+    "valueHash": -1076130734,
+    "inputsHash": 324704960
 }

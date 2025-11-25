@@ -1,0 +1,8 @@
+{
+    "value": [
+        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/mill-build/resources",
+        "ref:v0:eafe9ff0:/home/silence_breaker/git/ChiseLLM/out/mill-bsp-out/mill-build/compile.dest/transformed-classes"
+    ],
+    "valueHash": -348609265,
+    "inputsHash": -1041887702
+}

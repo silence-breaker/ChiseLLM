@@ -1,0 +1,30 @@
+{
+  "def build_.package_.build_$package_$chiselllm$$$_$scalaVersion$$anonfun$1$$anonfun$1(scala.collection.immutable.Seq,mill.api.TaskCtx)mill.api.daemon.Result": {
+    "call build_.package_.build_$package_$chiselllm$$$_$scalaVersion$$anonfun$1$$anonfun$1(scala.collection.immutable.Seq,mill.api.TaskCtx)mill.api.daemon.Result": {
+      "def build_.package_$chiselllm$#scalaVersion$$anonfun$1()mill.api.Task$Simple": {
+        "call build_.package_$chiselllm$!scalaVersion$$anonfun$1()mill.api.Task$Simple": {
+          "def build_.package_$chiselllm$#scalaVersion()mill.api.Task$Simple": {}
+        }
+      }
+    }
+  },
+  "def build_.package_.build_$package_$chiselllm$$$_$mvnDeps$$anonfun$1$$anonfun$1(scala.collection.immutable.Seq,mill.api.TaskCtx)mill.api.daemon.Result": {
+    "call build_.package_.build_$package_$chiselllm$$$_$mvnDeps$$anonfun$1$$anonfun$1(scala.collection.immutable.Seq,mill.api.TaskCtx)mill.api.daemon.Result": {
+      "def build_.package_$chiselllm$#mvnDeps$$anonfun$1()mill.api.Task$Simple": {
+        "call build_.package_$chiselllm$!mvnDeps$$anonfun$1()mill.api.Task$Simple": {
+          "def build_.package_$chiselllm$#mvnDeps()mill.api.Task$Simple": {}
+        }
+      }
+    }
+  },
+  "def build_.package_.build_$package_$chiselllm$$$_$scalacPluginMvnDeps$$anonfun$1$$anonfun$1(scala.collection.immutable.Seq,mill.api.TaskCtx)mill.api.daemon.Result": {
+    "call build_.package_.build_$package_$chiselllm$$$_$scalacPluginMvnDeps$$anonfun$1$$anonfun$1(scala.collection.immutable.Seq,mill.api.TaskCtx)mill.api.daemon.Result": {
+      "def build_.package_$chiselllm$#scalacPluginMvnDeps$$anonfun$1()mill.api.Task$Simple": {
+        "call build_.package_$chiselllm$!scalacPluginMvnDeps$$anonfun$1()mill.api.Task$Simple": {
+          "def build_.package_$chiselllm$#scalacPluginMvnDeps()mill.api.Task$Simple": {}
+        }
+      },
+      "def build_.package_$chiselllm$.$deserializeLambda$(java.lang.invoke.SerializedLambda)java.lang.Object": {}
+    }
+  }
+}
