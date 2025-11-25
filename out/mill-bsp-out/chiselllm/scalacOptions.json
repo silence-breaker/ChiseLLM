@@ -1,0 +1,11 @@
+{
+    "value": [
+        "-Xsource:2.13",
+        "-language:reflectiveCalls",
+        "-deprecation",
+        "-feature",
+        "-Xcheckinit"
+    ],
+    "valueHash": -1916456556,
+    "inputsHash": -1771513565
+}

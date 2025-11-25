@@ -1,0 +1,12 @@
+{
+    "value": [
+        [
+            "file:///home/silence_breaker/git/ChiseLLM/out/mill-bsp-out/chiselllm/sources.dest/tests"
+        ],
+        [
+            "file:///home/silence_breaker/git/ChiseLLM/out/mill-bsp-out/chiselllm/compileGeneratedSources.dest/"
+        ]
+    ],
+    "valueHash": 1937919984,
+    "inputsHash": -2075994136
+}

@@ -1,0 +1,12 @@
+{
+    "value": {
+        "$type": "DestPath",
+        "subPath": "",
+        "segments": [
+            "chiselllm",
+            "compiledClassesAndSemanticDbFiles"
+        ]
+    },
+    "valueHash": 336892918,
+    "inputsHash": -159753425
+}

@@ -1,0 +1,8 @@
+{
+    "value": [
+        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/chiselllm/resources",
+        "ref:v0:c984eca8:/home/silence_breaker/git/ChiseLLM/out/mill-bsp-out/chiselllm/compile.dest/classes"
+    ],
+    "valueHash": -461253082,
+    "inputsHash": -350325945
+}

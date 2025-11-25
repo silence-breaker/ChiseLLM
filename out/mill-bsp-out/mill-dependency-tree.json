@@ -1,3 +1,9 @@
 {
-  "version": {}
+  "Task.Anon@3dc78ac4(mill.javalib.bsp.BspJavaModule#bspBuildTargetInverseSources)": {
+    "chiselllm.allSourceFiles": {},
+    "chiselllm.allSources": {
+      "chiselllm.sources": {},
+      "chiselllm.generatedSources": {}
+    }
+  }
 }
