@@ -85,6 +85,7 @@ def log_error(log_file: str, case_id: str, module_name: str, error_info: str):
 
 # ============================================================================
 # Level 1: 基础语法 (Wire, Reg, IO 定义)
+# 注意: 指令模板采用自然语言风格，与训练集的机械化填空式产生差异
 # ============================================================================
 
 L1_TEMPLATES = [
@@ -98,7 +99,8 @@ L1_TEMPLATES = [
             {"width": 32, "name": "Word"},
             {"width": 64, "name": "DoubleWord"},
         ],
-        "instruction_template": "Write a Chisel module named `Passthrough{name}` with a {width}-bit input `in` and a {width}-bit output `out`. The output should be directly connected to the input.",
+        # [去套路化] 使用需求描述式而非填空式
+        "instruction_template": "I need a simple pass-through circuit. It should take a {width}-bit input signal and directly forward it to the output without any modification. Name this module `Passthrough{name}`.",
         "reference_template": '''import chisel3._
 
 class Passthrough{name} extends Module {{
@@ -120,7 +122,7 @@ class Passthrough{name} extends Module {{
             {"width": 16, "value": "1234", "name": "Const"},
             {"width": 32, "value": "\"hDEADBEEF\"", "name": "Magic"},  # 使用十六进制字符串
         ],
-        "instruction_template": "Write a Chisel module named `Wire{name}` that declares a {width}-bit Wire and assigns it the constant value {value}. Output this wire as `out`.",
+        "instruction_template": "Create a Chisel module called `Wire{name}` that outputs a constant value. Use an internal Wire to hold the value {value}, and connect it to a {width}-bit output port named `out`.",
         "reference_template": '''import chisel3._
 
 class Wire{name} extends Module {{
@@ -142,7 +144,7 @@ class Wire{name} extends Module {{
             {"width": 8, "init": 100, "name": "Hundred"},
             {"width": 16, "init": 0xFFFF, "name": "AllOnes"},
         ],
-        "instruction_template": "Write a Chisel module named `Reg{name}` with a {width}-bit register initialized to {init}. The register value should be output as `out`.",
+        "instruction_template": "Implement a module `Reg{name}` containing a {width}-bit register. The register should be initialized to {init} at reset and its value should be continuously output on a port named `out`.",
         "reference_template": '''import chisel3._
 
 class Reg{name} extends Module {{
@@ -159,6 +161,7 @@ class Reg{name} extends Module {{
 
 # ============================================================================
 # Level 2: 组合逻辑 (算术、逻辑、多路选择)
+# 注意: 指令模板采用自然语言风格，与训练集的机械化填空式产生差异
 # ============================================================================
 
 L2_TEMPLATES = [
@@ -170,7 +173,7 @@ L2_TEMPLATES = [
             {"width_in": 16, "width_out": 17, "name": "16bit"},
             {"width_in": 32, "width_out": 33, "name": "32bit"},
         ],
-        "instruction_template": "Write a Chisel module named `Adder{name}` that takes two {width_in}-bit unsigned inputs `a` and `b`, and outputs their sum as `sum`. The output should be {width_out} bits wide to avoid overflow.",
+        "instruction_template": "Design an adder circuit named `Adder{name}`. It takes two {width_in}-bit unsigned numbers as inputs (call them `a` and `b`) and produces their sum. Make the output `sum` {width_out} bits wide to handle potential overflow.",
         "reference_template": '''import chisel3._
 
 class Adder{name} extends Module {{
@@ -192,7 +195,7 @@ class Adder{name} extends Module {{
             {"width": 16, "name": "16bit"},
             {"width": 32, "name": "32bit"},
         ],
-        "instruction_template": "Write a Chisel module named `Mux2to1_{name}` with a 1-bit select input `sel`, two {width}-bit data inputs `a` and `b`, and a {width}-bit output `out`. When `sel` is true, output `a`; otherwise output `b`.",
+        "instruction_template": "Build a 2-to-1 multiplexer module called `Mux2to1_{name}`. It should have a boolean select signal `sel`, two {width}-bit data inputs `a` and `b`, and a {width}-bit output `out`. When the select is true, output should be `a`; otherwise it should be `b`.",
         "reference_template": '''import chisel3._
 
 class Mux2to1_{name} extends Module {{
@@ -216,7 +219,7 @@ class Mux2to1_{name} extends Module {{
             {"width": 8, "op": "less than", "op_sym": "<", "name": "Lt8"},
             {"width": 16, "op": "equal to", "op_sym": "===", "name": "Eq16"},
         ],
-        "instruction_template": "Write a Chisel module named `Comparator{name}` that compares two {width}-bit unsigned inputs `a` and `b`. Output a Bool `result` that is true when `a` is {op} `b`.",
+        "instruction_template": "I need a comparator module `Comparator{name}` that checks if one {width}-bit value is {op} another. Inputs should be named `a` and `b`, and the boolean output `result` indicates whether the comparison is true.",
         "reference_template": '''import chisel3._
 
 class Comparator{name} extends Module {{
@@ -239,7 +242,7 @@ class Comparator{name} extends Module {{
             {"width": 8, "op": "XOR", "op_sym": "^", "name": "Xor8"},
             {"width": 16, "op": "AND", "op_sym": "&", "name": "And16"},
         ],
-        "instruction_template": "Write a Chisel module named `Bitwise{name}` that performs bitwise {op} on two {width}-bit inputs `a` and `b`, outputting the result as `out`.",
+        "instruction_template": "Create a bitwise {op} gate module named `Bitwise{name}`. It should perform bitwise {op} operation on two {width}-bit inputs `a` and `b`, producing a {width}-bit output `out`.",
         "reference_template": '''import chisel3._
 
 class Bitwise{name} extends Module {{
@@ -257,6 +260,7 @@ class Bitwise{name} extends Module {{
 
 # ============================================================================
 # Level 3: 时序逻辑 (计数器、移位寄存器、简单FSM)
+# 注意: 指令模板采用自然语言风格，与训练集的机械化填空式产生差异
 # ============================================================================
 
 L3_TEMPLATES = [
@@ -268,7 +272,7 @@ L3_TEMPLATES = [
             {"width": 8, "name": "8bit"},
             {"width": 8, "name": "Mod100"},
         ],
-        "instruction_template": "Write a Chisel module named `Counter{name}` that implements a {width}-bit counter. It should have an enable input `en`. When enabled, the counter increments each clock cycle. The current count is output as `count`.",
+        "instruction_template": "Design a {width}-bit up-counter module named `Counter{name}`. The counter should only increment when an enable signal `en` is high. Output the current count value on a port called `count`.",
         "reference_template": '''import chisel3._
 
 class Counter{name} extends Module {{
@@ -295,7 +299,7 @@ class Counter{name} extends Module {{
             {"stages": 8, "width": 1, "name": "8stage"},
             {"stages": 4, "width": 8, "name": "4stage_8bit"},
         ],
-        "instruction_template": "Write a Chisel module named `ShiftReg{name}` that implements a {stages}-stage shift register with {width}-bit data width. It should have an input `in` and output `out`. Each clock cycle, data shifts through the stages.",
+        "instruction_template": "Implement a {stages}-stage shift register called `ShiftReg{name}`. Each stage holds {width}-bit data. Data enters through input `in` and exits through output `out` after {stages} clock cycles of delay.",
         "reference_template": '''import chisel3._
 
 class ShiftReg{name} extends Module {{
@@ -321,7 +325,7 @@ class ShiftReg{name} extends Module {{
         "variants": [
             {"name": "Rising"},
         ],
-        "instruction_template": "Write a Chisel module named `{name}Edge` that detects a rising edge on the input signal `in`. Output `detected` should be high for one clock cycle when a rising edge is detected.",
+        "instruction_template": "Create a rising edge detector module named `{name}Edge`. It monitors an input signal `in` and outputs a one-cycle pulse on `detected` whenever the input transitions from low to high.",
         "reference_template": '''import chisel3._
 
 class {name}Edge extends Module {{
@@ -341,7 +345,7 @@ class {name}Edge extends Module {{
         "variants": [
             {"name": "Falling"},
         ],
-        "instruction_template": "Write a Chisel module named `{name}Edge` that detects a falling edge on the input signal `in`. Output `detected` should be high for one clock cycle when a falling edge is detected.",
+        "instruction_template": "Create a falling edge detector module named `{name}Edge`. It monitors an input signal `in` and outputs a one-cycle pulse on `detected` whenever the input transitions from high to low.",
         "reference_template": '''import chisel3._
 
 class {name}Edge extends Module {{
@@ -361,7 +365,7 @@ class {name}Edge extends Module {{
         "variants": [
             {"name": "OnOff"},
         ],
-        "instruction_template": "Write a Chisel module named `FSM{name}` implementing a 2-state FSM with states OFF and ON. Input `toggle` transitions between states. Output `state` indicates current state (0=OFF, 1=ON).",
+        "instruction_template": "Implement a simple 2-state finite state machine called `FSM{name}`. It has two states: OFF and ON. A `toggle` input causes the FSM to switch between states. The current state should be output on a boolean port `state` (false for OFF, true for ON).",
         "reference_template": '''import chisel3._
 import chisel3.util._
 
@@ -395,6 +399,7 @@ class FSM{name} extends Module {{
 
 # ============================================================================
 # Level 4: 进阶模块 (参数化、接口协议)
+# 注意: 指令模板采用自然语言风格，与训练集的机械化填空式产生差异
 # ============================================================================
 
 L4_TEMPLATES = [
@@ -404,7 +409,8 @@ L4_TEMPLATES = [
         "variants": [
             {"name": "Adder", "default_width": 8},
         ],
-        "instruction_template": "Write a parameterized Chisel module named `ParamAdder` that takes a width parameter. It should have two inputs `a` and `b` of the parameterized width, and output `sum` with width+1 bits.",
+        # [修复+去套路化] 明确要求提供默认值，使用自然语言描述
+        "instruction_template": "I need a flexible adder that works with different bit widths. Create a parameterized Chisel module called `ParamAdder` that accepts a width parameter (use {default_width} as the default value). The module should add two inputs `a` and `b` of the specified width and produce a sum output that is one bit wider to prevent overflow. Important: the width parameter must have a default value so the module can be instantiated without arguments.",
         "reference_template": '''import chisel3._
 
 class ParamAdder(width: Int = {default_width}) extends Module {{
@@ -424,7 +430,7 @@ class ParamAdder(width: Int = {default_width}) extends Module {{
         "variants": [
             {"width": 8, "name": "8bit"},
         ],
-        "instruction_template": "Write a Chisel module named `ValidReg{name}` with a Valid interface input containing {width}-bit data. When valid is asserted, store the data in a register and output it.",
+        "instruction_template": "Build a module called `ValidReg{name}` that uses Chisel's Valid interface. The module should have a Valid input carrying {width}-bit data. When the valid signal is asserted, store the incoming data in a register. Output the register contents continuously on a port named `out`.",
         "reference_template": '''import chisel3._
 import chisel3.util._
 

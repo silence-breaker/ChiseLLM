@@ -41,7 +41,10 @@ def load_eval_set(path: str) -> List[Dict[str, Any]]:
 
 
 def extract_scala_code(text: str) -> str:
-    """从模型输出中提取 Scala/Chisel 代码"""
+    """从模型输出中提取 Scala/Chisel 代码
+    
+    增强版：支持处理不使用 Markdown 代码块的模型输出（SFT 后常见）
+    """
     # 优先匹配 ```scala 代码块
     patterns = [
         r'```scala\s*(.*?)```',
@@ -55,7 +58,36 @@ def extract_scala_code(text: str) -> str:
         if matches:
             return matches[0].strip()
     
-    # 如果没有代码块，尝试提取以 import 开头的内容
+    # [兜底策略 1] 如果文本包含 Chisel 特征关键字，认为整段文本可能就是代码
+    # 这是为了挽救 SFT 后不写 Markdown 的模型输出
+    if "class " in text and "extends Module" in text:
+        # 尝试提取从 import 或 class 开始的代码
+        lines = text.split('\n')
+        code_start = -1
+        brace_count = 0
+        code_end = len(lines)
+        
+        for i, line in enumerate(lines):
+            stripped = line.strip()
+            # 寻找代码起点
+            if code_start == -1:
+                if stripped.startswith('import ') or stripped.startswith('class '):
+                    code_start = i
+            
+            # 追踪大括号配对，找到模块结束点
+            if code_start != -1:
+                brace_count += line.count('{') - line.count('}')
+                if brace_count == 0 and i > code_start:
+                    code_end = i + 1
+                    break
+        
+        if code_start != -1:
+            return '\n'.join(lines[code_start:code_end]).strip()
+        
+        # 如果无法精确定位，返回整个文本
+        return text.strip()
+    
+    # [兜底策略 2] 尝试提取以 import 开头的内容
     lines = text.split('\n')
     code_lines = []
     in_code = False
@@ -65,12 +97,9 @@ def extract_scala_code(text: str) -> str:
             in_code = True
         if in_code:
             code_lines.append(line)
-            if line.strip() == '}' and len(code_lines) > 3:
-                # 可能是模块结束
-                break
     
     if code_lines:
-        return '\n'.join(code_lines)
+        return '\n'.join(code_lines).strip()
     
     return text  # 返回原文，让编译器报错
 
