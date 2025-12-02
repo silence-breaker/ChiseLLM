@@ -111,10 +111,13 @@ def verify_with_reflect_env(
     require_elaborate: bool = True,
     require_simulate: bool = False,
     testbench: Optional[str] = None,
-    timeout: int = 60
+    timeout: int = 120
 ) -> Dict[str, Any]:
     """
     使用反射环境验证代码
+    
+    通过子进程调用 chisel-llm 环境中的 reflect_env，
+    解决 chisel-train 环境中缺少 Mill/Chisel 依赖的问题。
     
     Returns:
         {
@@ -124,42 +127,83 @@ def verify_with_reflect_env(
             "verilog": str  # 如果成功生成
         }
     """
-    try:
-        from reflect_env import ReflectEnv
-    except ImportError:
-        return {
-            "success": False,
-            "stage": "setup",
-            "error_log": "无法导入 reflect_env 模块"
-        }
+    import subprocess
     
-    # 创建临时文件
+    # 创建临时文件保存 Scala 代码
     with tempfile.NamedTemporaryFile(mode='w', suffix='.scala', delete=False) as f:
         f.write(scala_code)
         scala_path = f.name
     
+    # 创建临时文件保存结果
+    result_path = scala_path.replace('.scala', '_result.json')
+    
     try:
-        env = ReflectEnv()
-        result = env.reflect(
-            scala_file=scala_path,
-            module_name=module_name,
-            silent=True
+        # 构建验证脚本（在 chisel-llm 环境中执行）
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        
+        verify_script = f'''
+import sys
+import json
+sys.path.insert(0, "{project_root}/src")
+from reflect_env import reflect
+
+result = reflect(
+    chisel_code_string=open("{scala_path}").read(),
+    module_name="{module_name}",
+    testbench_path=None,
+    output_dir=None,
+    verilog_file=None,
+    result_file=None,
+    silent=True
+)
+
+# 转换结果格式
+output = {{
+    "success": result.get("compiled", False) and result.get("elaborated", False),
+    "compiled": result.get("compiled", False),
+    "elaborated": result.get("elaborated", False),
+    "stage": "passed" if (result.get("compiled") and result.get("elaborated")) else 
+             ("compilation" if not result.get("compiled") else "elaboration"),
+    "error_log": result.get("error_log", ""),
+    "verilog": result.get("verilog", "")
+}}
+
+with open("{result_path}", "w") as f:
+    json.dump(output, f)
+'''
+        
+        # 通过 conda run 在 chisel-llm 环境中执行
+        cmd = [
+            "conda", "run", "-n", "chisel-llm", "--no-capture-output",
+            "python", "-c", verify_script
+        ]
+        
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            cwd=project_root
         )
         
-        # 解析结果
-        if result.get("stage") == "passed" or result.get("success", False):
-            return {
-                "success": True,
-                "stage": "passed",
-                "error_log": "",
-                "verilog": result.get("verilog", "")
-            }
+        # 读取结果
+        if os.path.exists(result_path):
+            with open(result_path, 'r') as f:
+                result = json.load(f)
+            return result
         else:
             return {
                 "success": False,
-                "stage": result.get("stage", "unknown"),
-                "error_log": result.get("error_log", str(result))
+                "stage": "setup",
+                "error_log": f"验证脚本执行失败:\nstdout: {proc.stdout}\nstderr: {proc.stderr}"
             }
+            
+    except subprocess.TimeoutExpired:
+        return {
+            "success": False,
+            "stage": "timeout",
+            "error_log": f"验证超时 ({timeout}s)"
+        }
     except Exception as e:
         return {
             "success": False,
@@ -168,8 +212,12 @@ def verify_with_reflect_env(
         }
     finally:
         # 清理临时文件
-        if os.path.exists(scala_path):
-            os.remove(scala_path)
+        for path in [scala_path, result_path]:
+            if os.path.exists(path):
+                try:
+                    os.remove(path)
+                except:
+                    pass
 
 
 class ModelInterface:

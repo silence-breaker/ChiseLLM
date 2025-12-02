@@ -138,6 +138,76 @@ INSTRUCTION_TEMPLATES = {
         "I need an FSM with {num_states} states: {state_names}.",
         "Write a state machine that transitions between {num_states} states.",
         "Build a {num_states}-state FSM using Chisel Enum."
+    ],
+    "fsm_toggle": [
+        "Implement a toggle FSM with ON and OFF states.",
+        "Create a 2-state FSM that toggles between ON and OFF.",
+        "I need a simple ON/OFF state machine with a toggle input.",
+        "Write an FSM that switches states when toggle is asserted.",
+        "Build a 2-state toggle FSM using Enum."
+    ],
+    "shift_cat": [
+        "Implement a {stages}-stage shift register using bit concatenation.",
+        "Create a {stages}-cycle delay line using Cat.",
+        "I need a shift register with {stages} stages using Cat for shifting.",
+        "Write a {stages}-stage shift register that uses Cat to shift bits.",
+        "Build a shift register using Cat to concatenate bits."
+    ],
+    "popcount": [
+        "Count the number of 1-bits in a {width}-bit input.",
+        "Implement a population count for {width}-bit signal.",
+        "I need a module that counts set bits in a {width}-bit input.",
+        "Write a bit counter using PopCount for {width} bits.",
+        "Build a popcount circuit for {width}-bit data."
+    ],
+    "reverse": [
+        "Reverse the bit order of a {width}-bit input.",
+        "Implement bit reversal for a {width}-bit signal.",
+        "I need to reverse the bits of a {width}-bit input.",
+        "Write a module that reverses bit order using Reverse.",
+        "Build a {width}-bit bit-reversal circuit."
+    ],
+    "fill": [
+        "Replicate a {width}-bit input {times} times.",
+        "Create a bit replicator that copies input {times} times.",
+        "I need to duplicate a {width}-bit signal {times} times.",
+        "Write a module using Fill to replicate bits.",
+        "Build a bit replication circuit with {times}x expansion."
+    ],
+    "log2": [
+        "Compute log2 of a {width}-bit input.",
+        "Find the position of the highest set bit in {width}-bit input.",
+        "I need to calculate log2 of a {width}-bit signal.",
+        "Write a module that computes Log2 for {width} bits.",
+        "Build a log2 calculator for {width}-bit data."
+    ],
+    "priority_encoder": [
+        "Implement a priority encoder for {width}-bit input.",
+        "Create a circuit that finds the lowest set bit in {width} bits.",
+        "I need a priority encoder for a {width}-bit signal.",
+        "Write a priority encoder using PriorityEncoder.",
+        "Build a {width}-bit priority encoder."
+    ],
+    "onehot_convert": [
+        "Convert one-hot encoding to binary for {width} bits.",
+        "Implement one-hot to binary conversion.",
+        "I need to decode a {width}-bit one-hot signal to binary.",
+        "Write a one-hot decoder using OHToUInt.",
+        "Build a one-hot to binary converter."
+    ],
+    "binary_to_onehot": [
+        "Convert binary to one-hot encoding.",
+        "Implement binary to one-hot conversion for {enc_width}-bit input.",
+        "I need to encode binary to {width}-bit one-hot.",
+        "Write a binary to one-hot encoder using UIntToOH.",
+        "Build a binary to one-hot converter."
+    ],
+    "mux1h": [
+        "Implement a one-hot multiplexer for {width}-bit data.",
+        "Create a Mux1H with 4 inputs of {width} bits each.",
+        "I need a one-hot mux for {width}-bit signals.",
+        "Write a multiplexer using Mux1H for one-hot selection.",
+        "Build a 4-input one-hot multiplexer."
     ]
 }
 
@@ -360,6 +430,58 @@ class {{ module_name }} extends Module {
 }
 """
 
+# 新增: 使用 Cat 的移位寄存器变体 (针对性训练 import chisel3.util.Cat)
+TEMPLATE_SHIFT_REG_CAT = """
+import chisel3._
+import chisel3.util.Cat
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt(1.W))
+    val out = Output(UInt(1.W))
+  })
+  
+  // {{ stages }}-stage shift register using Cat
+  val reg = RegInit(0.U({{ stages }}.W))
+  reg := Cat(reg({{ stages_minus_2 }}, 0), io.in)
+  
+  io.out := reg({{ stages_minus_1 }})
+}
+"""
+
+# 新增: FSM (有限状态机) - 使用 Enum 列表解构 (针对性训练)
+TEMPLATE_FSM_ENUM_LIST = """
+import chisel3._
+import chisel3.util._
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val toggle = Input(Bool())
+    val state = Output(Bool())
+  })
+  
+  // Define states using Enum list destructuring
+  val sOff :: sOn :: Nil = Enum(2)
+  val stateReg = RegInit(sOff)
+  
+  // State transition logic
+  switch (stateReg) {
+    is (sOff) {
+      when (io.toggle) {
+        stateReg := sOn
+      }
+    }
+    is (sOn) {
+      when (io.toggle) {
+        stateReg := sOff
+      }
+    }
+  }
+  
+  io.state := stateReg === sOn
+}
+"""
+
 # 新增: FSM (有限状态机)
 TEMPLATE_FSM = """
 import chisel3._
@@ -396,6 +518,142 @@ class {{ module_name }} extends Module {
   
   // Output logic
   io.done := state === sDone
+}
+"""
+
+# ==========================================
+# 新增: Level 2.5 - chisel3.util 专项训练
+# ==========================================
+
+# 使用 PopCount (计算 1 的个数)
+TEMPLATE_POPCOUNT = """
+import chisel3._
+import chisel3.util.PopCount
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt({{ width }}.W))
+    val count = Output(UInt({{ count_width }}.W))
+  })
+  
+  // Count the number of 1s in input
+  io.count := PopCount(io.in)
+}
+"""
+
+# 使用 Reverse (位反转)
+TEMPLATE_REVERSE = """
+import chisel3._
+import chisel3.util.Reverse
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt({{ width }}.W))
+    val out = Output(UInt({{ width }}.W))
+  })
+  
+  // Reverse bit order
+  io.out := Reverse(io.in)
+}
+"""
+
+# 使用 Fill (位复制)
+TEMPLATE_FILL = """
+import chisel3._
+import chisel3.util.Fill
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt({{ width }}.W))
+    val out = Output(UInt({{ total_width }}.W))
+  })
+  
+  // Replicate input {{ times }} times
+  io.out := Fill({{ times }}, io.in)
+}
+"""
+
+# 使用 Log2 (计算 log2)
+TEMPLATE_LOG2 = """
+import chisel3._
+import chisel3.util.Log2
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt({{ width }}.W))
+    val out = Output(UInt({{ log_width }}.W))
+  })
+  
+  // Compute log2 of input (position of highest 1 bit)
+  io.out := Log2(io.in)
+}
+"""
+
+# 使用 PriorityEncoder (优先编码器)
+TEMPLATE_PRIORITY_ENCODER = """
+import chisel3._
+import chisel3.util.PriorityEncoder
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt({{ width }}.W))
+    val out = Output(UInt({{ enc_width }}.W))
+  })
+  
+  // Priority encoder: returns index of lowest set bit
+  io.out := PriorityEncoder(io.in)
+}
+"""
+
+# 使用 OHToUInt (独热码转二进制)
+TEMPLATE_OH_TO_UINT = """
+import chisel3._
+import chisel3.util.OHToUInt
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt({{ width }}.W))
+    val out = Output(UInt({{ enc_width }}.W))
+  })
+  
+  // Convert one-hot encoding to binary
+  io.out := OHToUInt(io.in)
+}
+"""
+
+# 使用 UIntToOH (二进制转独热码)
+TEMPLATE_UINT_TO_OH = """
+import chisel3._
+import chisel3.util.UIntToOH
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt({{ enc_width }}.W))
+    val out = Output(UInt({{ width }}.W))
+  })
+  
+  // Convert binary to one-hot encoding
+  io.out := UIntToOH(io.in)
+}
+"""
+
+# 使用 Mux1H (独热码多路选择器)
+TEMPLATE_MUX1H = """
+import chisel3._
+import chisel3.util.Mux1H
+
+class {{ module_name }} extends Module {
+  val io = IO(new Bundle {
+    val sel = Input(UInt(4.W))
+    val in0 = Input(UInt({{ width }}.W))
+    val in1 = Input(UInt({{ width }}.W))
+    val in2 = Input(UInt({{ width }}.W))
+    val in3 = Input(UInt({{ width }}.W))
+    val out = Output(UInt({{ width }}.W))
+  })
+  
+  // One-hot multiplexer
+  io.out := Mux1H(io.sel, Seq(io.in0, io.in1, io.in2, io.in3))
 }
 """
 
@@ -535,9 +793,100 @@ def generate_level2(index):
 
     return {"module_name": module_name, "entry": {"instruction": instruction, "input": "", "output": code}}
 
+def generate_level2_util(index):
+    """Level 2.5: chisel3.util 专项训练 (PopCount, Reverse, Fill, Log2, PriorityEncoder, etc.)"""
+    subtype = random.choice([
+        "popcount", "reverse", "fill", "log2", 
+        "priority_encoder", "oh_to_uint", "uint_to_oh", "mux1h"
+    ])
+    width = random.choice([4, 8, 16, 32])
+    
+    prefixes = ["Util", "Bit", "Logic", "Fast", "Smart"]
+    
+    if subtype == "popcount":
+        nouns = ["PopCounter", "BitCounter", "OnesCount", "SetBitCount"]
+        module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
+        
+        # log2(width) + 1 bits to hold count
+        count_width = (width - 1).bit_length() + 1
+        
+        t = Template(TEMPLATE_POPCOUNT)
+        code = t.render(module_name=module_name, width=width, count_width=count_width).strip()
+        instruction = get_random_instruction("popcount", width=width)
+        
+    elif subtype == "reverse":
+        nouns = ["BitReverser", "Reverser", "BitFlip", "MirrorBits"]
+        module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
+        
+        t = Template(TEMPLATE_REVERSE)
+        code = t.render(module_name=module_name, width=width).strip()
+        instruction = get_random_instruction("reverse", width=width)
+        
+    elif subtype == "fill":
+        nouns = ["BitFill", "Replicator", "BitExpand", "SignExtend"]
+        module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
+        
+        times = random.choice([2, 4, 8])
+        total_width = width * times
+        
+        t = Template(TEMPLATE_FILL)
+        code = t.render(module_name=module_name, width=width, times=times, total_width=total_width).strip()
+        instruction = get_random_instruction("fill", width=width, times=times)
+        
+    elif subtype == "log2":
+        nouns = ["Log2Calc", "BitPosition", "HighBitFinder", "Log2Unit"]
+        module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
+        
+        log_width = (width - 1).bit_length()
+        
+        t = Template(TEMPLATE_LOG2)
+        code = t.render(module_name=module_name, width=width, log_width=log_width).strip()
+        instruction = get_random_instruction("log2", width=width)
+        
+    elif subtype == "priority_encoder":
+        nouns = ["PriorityEnc", "LowBitFinder", "PrioEncoder", "FirstOne"]
+        module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
+        
+        enc_width = (width - 1).bit_length()
+        
+        t = Template(TEMPLATE_PRIORITY_ENCODER)
+        code = t.render(module_name=module_name, width=width, enc_width=enc_width).strip()
+        instruction = get_random_instruction("priority_encoder", width=width)
+        
+    elif subtype == "oh_to_uint":
+        nouns = ["OHDecoder", "OneHotToBin", "OHToUInt", "OneHotDec"]
+        module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
+        
+        enc_width = (width - 1).bit_length()
+        
+        t = Template(TEMPLATE_OH_TO_UINT)
+        code = t.render(module_name=module_name, width=width, enc_width=enc_width).strip()
+        instruction = get_random_instruction("onehot_convert", width=width)
+        
+    elif subtype == "uint_to_oh":
+        nouns = ["OHEncoder", "BinToOneHot", "UIntToOH", "OneHotEnc"]
+        module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
+        
+        enc_width = (width - 1).bit_length()
+        
+        t = Template(TEMPLATE_UINT_TO_OH)
+        code = t.render(module_name=module_name, width=width, enc_width=enc_width).strip()
+        instruction = get_random_instruction("binary_to_onehot", width=width, enc_width=enc_width)
+        
+    else:  # mux1h
+        nouns = ["Mux1H", "OneHotMux", "OHSelector", "OneHotSwitch"]
+        module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
+        
+        t = Template(TEMPLATE_MUX1H)
+        code = t.render(module_name=module_name, width=width).strip()
+        instruction = get_random_instruction("mux1h", width=width)
+    
+    return {"module_name": module_name, "entry": {"instruction": instruction, "input": "", "output": code}}
+
 def generate_level3(index):
-    """Level 3: 时序逻辑与状态机 (Counter, ShiftReg, FSM)"""
-    subtype = random.choice(["counter", "shift", "fsm"])
+    """Level 3: 时序逻辑与状态机 (Counter, ShiftReg, FSM) - 含 chisel3.util 变体"""
+    # 增加 shift_cat 和 fsm_enum 变体，确保模型学会 import chisel3.util._
+    subtype = random.choice(["counter", "shift", "shift_cat", "fsm", "fsm_enum"])
     width = random.randint(4, 16)
     
     prefixes = ["Cycle", "Event", "Pulse", "Data", "Sync"]
@@ -552,7 +901,7 @@ def generate_level3(index):
         instruction = get_random_instruction("counter", width=width)
         
     elif subtype == "shift":
-        # 命名策略: 移位寄存器相关
+        # 命名策略: 移位寄存器相关 (基础版，不使用 Cat)
         nouns = ["ShiftReg", "DelayLine", "Pipeline", "Buffer"]
         module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
         
@@ -560,8 +909,19 @@ def generate_level3(index):
         code = t.render(module_name=module_name, width=width).strip()
         instruction = get_random_instruction("shift_reg")
     
-    else: # fsm
-        # 新增: FSM 有限状态机
+    elif subtype == "shift_cat":
+        # 移位寄存器使用 Cat (显式 import chisel3.util._)
+        nouns = ["ShiftPipe", "CatShift", "BitShifter", "ConcatReg"]
+        module_name = f"{random.choice(prefixes)}{random.choice(nouns)}_{index}"
+        
+        depth = random.choice([4, 8, 16])
+        
+        t = Template(TEMPLATE_SHIFT_REG_CAT)
+        code = t.render(module_name=module_name, width=width, depth=depth).strip()
+        instruction = get_random_instruction("shift_cat", depth=depth)
+    
+    elif subtype == "fsm":
+        # 基础 FSM (ChiselEnum 推导)
         nouns = ["FSM", "StateMachine", "Controller", "Sequencer"]
         module_name = f"{random.choice(['Simple', 'Basic', 'Auto'])}{random.choice(nouns)}_{index}"
         
@@ -571,6 +931,15 @@ def generate_level3(index):
         t = Template(TEMPLATE_FSM)
         code = t.render(module_name=module_name).strip()
         instruction = get_random_instruction("fsm", num_states=num_states, state_names=state_names)
+    
+    else:  # fsm_enum
+        # FSM 使用 Enum list 解构 (显式 import chisel3.util._)
+        nouns = ["ToggleFSM", "PingPong", "Alternator", "Flipper"]
+        module_name = f"{random.choice(['Auto', 'Smart', 'Fast'])}{random.choice(nouns)}_{index}"
+        
+        t = Template(TEMPLATE_FSM_ENUM_LIST)
+        code = t.render(module_name=module_name).strip()
+        instruction = get_random_instruction("fsm_toggle")
 
     return {"module_name": module_name, "entry": {"instruction": instruction, "input": "", "output": code}}
 
@@ -616,11 +985,14 @@ def worker_task(args):
     
     try:
         r = random.random()
-        # 更新课程分布: Level 1 (50%) | Level 2 (35%) | Level 3 (15%)
-        if r < 0.5:
+        # 更新课程分布: Level 1 (45%) | Level 2 (30%) | Level 2.5 util (10%) | Level 3 (15%)
+        # Level 2.5 专门训练 chisel3.util 相关的 API (PopCount, Reverse, Fill, Log2, etc.)
+        if r < 0.45:
             sample = generate_level1(index)
-        elif r < 0.85:
+        elif r < 0.75:
             sample = generate_level2(index)
+        elif r < 0.85:
+            sample = generate_level2_util(index)  # chisel3.util 专项训练
         else:
             sample = generate_level3(index)
             
@@ -671,8 +1043,8 @@ def main():
     
     print(f"🚀 启动 Chisel 合成数据引擎 V3 (Target: {TARGET_COUNT})", flush=True)
     print(f"⚡ 启用多进程加速: {num_processes} workers", flush=True)
-    print("📊 课程分布: Level 1 (50%) | Level 2 (35%) | Level 3 (15%)", flush=True)
-    print("✨ V3 新特性: 指令多样性池 | Cat/Slice/MuxCase 模板 | FSM 状态机 | 错误日志", flush=True)
+    print("📊 课程分布: Level 1 (45%) | Level 2 (30%) | Level 2.5 util (10%) | Level 3 (15%)", flush=True)
+    print("✨ V3 新特性: chisel3.util 专项训练 | Cat/Enum/PopCount | FSM 状态机 | 错误日志", flush=True)
     print("⏳ 正在初始化并行工作进程 (JVM 预热可能需要几十秒，期间进度条可能不会更新，请耐心等待)...", flush=True)
     
     valid_dataset = []
