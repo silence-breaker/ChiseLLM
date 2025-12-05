@@ -644,25 +644,16 @@ def main():
     print(f"⚡ 启用多进程加速: {num_processes} workers")
     print("⏳ JVM 预热中，请稍候...")
     
-    # 构建任务列表：为每种类型生成足够的任务
-    tasks = []
-    base_seed = random.randint(0, 100000)
-    task_index = 0
-    
-    for gen_name, _, target_count in GENERATORS:
-        # 多生成一些以应对验证失败
-        for i in range(int(target_count * 1.5)):
-            tasks.append((task_index, base_seed + task_index, gen_name))
-            task_index += 1
-    
-    # 打乱任务顺序，使不同类型交错执行
-    random.shuffle(tasks)
-    
     # 统计各类型已生成数量
     type_counts = {name: 0 for name, _, _ in GENERATORS}
     type_targets = {name: count for name, _, count in GENERATORS}
     
     all_samples = []
+    
+    # 实时保存文件（防止意外中断丢失数据）
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_file = f"dataset/chisel_util_supplement_{timestamp}.jsonl"
+    output_handle = open(output_file, 'w', encoding='utf-8')
     
     # 创建进程池
     print(f"🔧 创建进程池 (workers={num_processes})...")
@@ -672,39 +663,62 @@ def main():
     pbar = tqdm(total=total_target, desc="生成进度", dynamic_ncols=True)
     
     try:
-        # 使用 imap_unordered 获取结果
-        for result in pool.imap_unordered(worker_task, tasks):
-            if result is not None:
-                gen_type = result.pop("type")
-                
-                # 检查该类型是否已达到目标
-                if type_counts[gen_type] < type_targets[gen_type]:
-                    type_counts[gen_type] += 1
-                    all_samples.append(result)
-                    pbar.update(1)
-                    
-                    # 更新进度条描述
-                    done = sum(type_counts.values())
-                    pbar.set_postfix({"done": done, "rate": f"{len(all_samples)}/{done}"})
+        base_seed = random.randint(0, 100000)
+        task_index = 0
+        pending_results = []
+        
+        # 逐类型生成，每个类型完成后立即处理
+        for gen_name, _, target_count in GENERATORS:
+            current_count = 0
+            batch_size = min(target_count + 20, 100)  # 每批次任务数
             
-            # 检查是否全部完成
-            if all(type_counts[name] >= type_targets[name] for name in type_counts):
-                break
+            while current_count < target_count:
+                # 创建一批任务
+                batch_tasks = []
+                for _ in range(batch_size):
+                    batch_tasks.append((task_index, base_seed + task_index, gen_name))
+                    task_index += 1
+                
+                # 使用 apply_async 提交任务，设置超时
+                async_results = [pool.apply_async(worker_task, (task,)) for task in batch_tasks]
+                
+                # 收集结果，每个任务最多等待 60 秒
+                for ar in async_results:
+                    try:
+                        result = ar.get(timeout=60)
+                        if result is not None and current_count < target_count:
+                            gen_type = result.pop("type")
+                            current_count += 1
+                            type_counts[gen_type] = current_count
+                            all_samples.append(result)
+                            
+                            # 实时写入文件
+                            output_handle.write(json.dumps(result, ensure_ascii=False) + '\n')
+                            output_handle.flush()
+                            
+                            pbar.update(1)
+                            done = sum(type_counts.values())
+                            pbar.set_postfix({"type": gen_name, "done": f"{current_count}/{target_count}"})
+                            
+                            if current_count >= target_count:
+                                break
+                    except multiprocessing.TimeoutError:
+                        pass  # 超时跳过
+                    except Exception as e:
+                        pass  # 其他错误跳过
+                
+                if current_count >= target_count:
+                    break
+            
+            print(f"  ✅ {gen_name}: {current_count}/{target_count} 完成")
                 
     except KeyboardInterrupt:
         print("\n⚠️ 用户中断，保存已生成的数据...")
     finally:
         pbar.close()
+        output_handle.close()
         pool.terminate()
         pool.join()
-    
-    # 保存结果
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_file = f"dataset/chisel_util_supplement_{timestamp}.jsonl"
-    
-    with open(output_file, 'w', encoding='utf-8') as f:
-        for sample in all_samples:
-            f.write(json.dumps(sample, ensure_ascii=False) + '\n')
     
     print(f"\n" + "=" * 60)
     print(f"✅ 补充数据集已保存: {output_file}")
