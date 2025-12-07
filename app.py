@@ -79,9 +79,15 @@ with col_chat:
                     st.session_state.last_result = step["result"]
                     st.session_state.last_code = step["code"]
                 elif step["status"] == "failed":
-                    status_box.update(label="💀 任务失败", state="error")
+                    status_box.update(label="💀 任务失败，已显示最后一次错误报告", state="error")
                     st.error(step["msg"])
-                    st.stop()
+                    
+                    # ✅ 即使失败，也保存结果到 Session，以便右侧显示
+                    if "result" in step:
+                        st.session_state.last_result = step["result"]
+                        st.session_state.last_code = step["code"]
+                    
+                    # ❌ 删掉 st.stop()，或者把它移到最后，允许代码继续往下跑以渲染右侧栏
             
             st.markdown(response_content)
             st.session_state.messages.append({"role": "assistant", "content": response_content})

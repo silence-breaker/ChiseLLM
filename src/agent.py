@@ -106,4 +106,10 @@ class ChiselAgent:
                 yield {"status": "error", "msg": f"修复过程 API 调用失败: {str(e)}"}
                 return
 
-        yield {"status": "failed", "msg": "达到最大重试次数，修复失败。"}
+        # 在循环结束后，把最后一次的 result 和 code 也传出去
+        yield {
+            "status": "failed", 
+            "msg": "达到最大重试次数，修复失败。请查看右侧验证报告。", 
+            "result": result, 
+            "code": code
+        }
