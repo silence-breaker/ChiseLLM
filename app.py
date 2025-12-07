@@ -1,61 +1,67 @@
 import streamlit as st
-import time
+# 注意：这里我们引入新的 Agent 类 (参数变了)
 from src.agent import ChiselAgent
 
-# 页面配置
 st.set_page_config(page_title="ChiseLLM Workstation", layout="wide", page_icon="⚡")
 
-st.title("⚡ ChiseLLM 智能工作台")
-st.caption("Auto-generating & Verifying Chisel Hardware Designs")
+st.title("⚡ ChiseLLM 智能工作台 (Google Native 版)")
+st.caption("Powered by Google Gemini 1.5 Flash & Chisel 6")
 
-# --- 侧边栏：配置区 ---
+# --- 侧边栏 ---
 with st.sidebar:
-    st.header("🔧 模型配置")
+    st.header("🔧 配置")
     
-    # 默认值是为了方便演示，你可以替换成你自己的 Key
-    api_key = st.text_input("API Key", type="password", help="输入 OpenAI 或 DeepSeek 的 API Key")
-    base_url = st.text_input("Base URL", value="https://api.deepseek.com", help="例如 https://api.deepseek.com")
-    model_name = st.selectbox("选择模型", ["deepseek-coder", "gpt-4o", "gpt-3.5-turbo"])
+    # 只需要 API Key
+    api_key = st.text_input("Google API Key", type="password", help="输入以 AIza 开头的密钥")
+    
+
+# 修改 app.py - 使用你账号里真实存在的模型 ID
+    model_name = st.selectbox(
+        "选择模型", 
+        [
+            "gemini-flash-latest",     # ✅ 你的列表里有这个！用它！
+            "gemini-pro-latest",       # ✅ 你的列表里也有这个作为保底
+            "gemini-2.0-flash-exp",    # ⚠️ 实验版，如果 2.0-flash 没额度，可以试试带 exp 后缀的这个
+        ],
+        index=0
+    )
     
     st.divider()
-    st.info("💡 提示：本环境已集成 Scala 2.13 + Chisel 6 + Verilator。")
+    st.success("✅ 已切换至 Google 原生接口，速度更快且稳定。")
 
-# --- 初始化 Session ---
+# --- Session 初始化 ---
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "last_result" not in st.session_state:
     st.session_state.last_result = None
 
-# --- 主界面：左侧对话，右侧结果 ---
+# --- 主界面 ---
 col_chat, col_code = st.columns([1, 1])
 
 with col_chat:
     st.subheader("💬 需求对话")
     
-    # 渲染历史消息
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # 处理用户输入
-    if prompt := st.chat_input("请输入设计需求 (例如：写一个带使能端的4位计数器)"):
+    if prompt := st.chat_input("请输入设计需求 (例如：写一个带同步复位的8位寄存器)"):
         if not api_key:
-            st.error("请先在左侧侧边栏输入 API Key！")
+            st.error("请先在左侧输入 Google API Key！")
             st.stop()
             
-        # 显示用户消息
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # 运行 Agent
         with st.chat_message("assistant"):
-            status_box = st.status("🚀 Agent 启动中...", expanded=True)
-            agent = ChiselAgent(api_key, base_url, model_name)
+            status_box = st.status("🚀 Gemini 启动中...", expanded=True)
+            
+            # ⚠️ 注意：这里不再需要 base_url
+            agent = ChiselAgent(api_key=api_key, model_name=model_name)
             
             response_content = ""
             
-            # 流式获取 Agent 的步骤更新
             for step in agent.run_loop(prompt):
                 if step["status"] == "generating":
                     status_box.write(f"✍️ {step['msg']}")
@@ -68,7 +74,7 @@ with col_chat:
                     st.error(step["msg"])
                     st.stop()
                 elif step["status"] == "success":
-                    status_box.update(label="✅ 生成成功！编译通过！", state="complete", expanded=False)
+                    status_box.update(label="✅ 生成成功！", state="complete", expanded=False)
                     response_content = step["raw_response"]
                     st.session_state.last_result = step["result"]
                     st.session_state.last_code = step["code"]
@@ -77,41 +83,31 @@ with col_chat:
                     st.error(step["msg"])
                     st.stop()
             
-            # 显示最终回答
             st.markdown(response_content)
             st.session_state.messages.append({"role": "assistant", "content": response_content})
-            st.rerun() # 强制刷新以更新右侧代码区
+            st.rerun()
 
-# --- 右侧：代码与验证结果 ---
+# --- 右侧代码区 (保持不变) ---
 with col_code:
     st.subheader("💻 代码工作区")
-    
     if st.session_state.get("last_result"):
         result = st.session_state.last_result
         code = st.session_state.last_code
         
         tab1, tab2, tab3 = st.tabs(["📐 Chisel 源码", "📝 生成的 Verilog", "📊 验证报告"])
-        
         with tab1:
             st.code(code, language="scala")
-            
         with tab2:
             if result.get("generated_verilog"):
                 st.code(result["generated_verilog"], language="verilog")
-                st.download_button(
-                    label="⬇️ 下载 Verilog",
-                    data=result["generated_verilog"],
-                    file_name=f"{result['module_name']}.v",
-                    mime="text/plain"
-                )
+                st.download_button("⬇️ 下载 Verilog", result["generated_verilog"], file_name=f"{result['module_name']}.v")
             else:
                 st.info("未生成 Verilog")
-                
         with tab3:
             st.json(result)
             if result['elaborated']:
-                st.success("Elaboration Passed (Firtool successfully generated Verilog)")
+                st.success("Elaboration Passed")
             else:
                 st.error("Elaboration Failed")
     else:
-        st.info("👈 请在左侧输入需求，生成的代码将显示在这里。")
+        st.info("👈 请在左侧输入需求")

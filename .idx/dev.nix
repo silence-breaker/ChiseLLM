@@ -3,17 +3,21 @@
   # 使用稳定通道
   channel = "stable-23.11"; 
 
-  # 1. 安装软件包
-  packages = [
-    pkgs.python3
-    pkgs.python3Packages.pip  # pip 包管理
-    pkgs.python3Packages.virtualenv # 虚拟环境工具
-    pkgs.jdk17        # Scala/Chisel 运行环境
-    pkgs.mill         # 构建工具
-    pkgs.verilator    # 仿真器
-    pkgs.gnumake      # 编译工具
-    pkgs.gcc          # C++ 编译器
-  ];
+  # 1. 系统级软件
+  # .idx/dev.nix 的 packages 部分
+    packages = [
+      pkgs.python3
+      pkgs.python3Packages.pip
+      pkgs.python3Packages.virtualenv
+      pkgs.jdk17
+      pkgs.mill
+      pkgs.verilator
+      pkgs.gnumake
+      pkgs.gcc
+      
+      # 👇👇👇 核心修复：添加 CIRCT 工具链 (包含 firtool)
+      pkgs.circt 
+    ];
 
   # 2. 环境变量
   env = {};
@@ -24,13 +28,15 @@
       "scalameta.metals" 
     ];
 
-    # 3. ⚠️ 关键修复：添加网页预览配置
+    # 3. 预览配置 (修复了路径找不到的问题)
     previews = {
       enable = true;
       previews = {
         web = {
-          # IDX 会自动把 $PORT 替换为它分配的端口
+          # 核心修复：直接调用虚拟环境里的 Python 来运行 Streamlit
           command = [
+            "./.venv/bin/python" 
+            "-m" 
             "streamlit" 
             "run" 
             "app.py" 
@@ -39,14 +45,28 @@
             "--server.enableCORS" "false"
           ];
           manager = "web";
+          env = {
+            # 确保环境变量也指向虚拟环境
+            PORT = "$PORT";
+          };
         };
       };
     };
 
     workspace = {
+      # 4. 生命周期钩子：自动创建环境并安装依赖
       onCreate = {
-        # 首次创建时自动安装依赖
-        install-deps = "python3 -m pip install -r requirements.txt && python3 -m pip install streamlit openai";
+        setup-venv = ''
+          python3 -m venv .venv && \
+          source .venv/bin/activate && \
+          pip install --upgrade pip && \
+          pip install -r requirements.txt && \
+          pip install streamlit openai
+        '';
+      };
+      # 每次启动时，确保一下依赖（可选，防止环境损坏）
+      onStart = {
+        check-env = "verilator --version";
       };
     };
   };
