@@ -1,0 +1,121 @@
+{
+  "metadata": {
+    "eval_set": "eval/eval_set_v2.jsonl",
+    "model": "/home/silence_breaker/git/LLaMA-Factory/outputs/chisel-coder-lora",
+    "timestamp": "2025-12-07T19:59:10.649987",
+    "verify": true
+  },
+  "statistics": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "by_level": {
+      "L1-Basic": {
+        "total": 5,
+        "passed": 5,
+        "pass_rate": 1.0
+      }
+    },
+    "by_category": {
+      "passthrough": {
+        "total": 5,
+        "passed": 5,
+        "pass_rate": 1.0
+      }
+    },
+    "by_failed_stage": {},
+    "pass_rate": 1.0
+  },
+  "results": [
+    {
+      "id": "L1-Basic_001",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 1-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughBit`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughBit extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val out = Output(Bool())\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughBit extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val out = Output(Bool())\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L1-Basic_002",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 8-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughByte`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughByte extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughByte extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L1-Basic_003",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 16-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughHalfWord`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughHalfWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(16.W))\n    val out = Output(UInt(16.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughHalfWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(16.W))\n    val out = Output(UInt(16.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L1-Basic_004",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 32-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughWord`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(32.W))\n    val out = Output(UInt(32.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(32.W))\n    val out = Output(UInt(32.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L1-Basic_005",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 64-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughDoubleWord`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughDoubleWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(64.W))\n    val out = Output(UInt(64.W))\n  })\n  \n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughDoubleWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(64.W))\n    val out = Output(UInt(64.W))\n  })\n  \n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    }
+  ]
+}

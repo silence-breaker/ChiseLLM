@@ -58,48 +58,55 @@ def extract_scala_code(text: str) -> str:
         if matches:
             return matches[0].strip()
     
-    # [兜底策略 1] 如果文本包含 Chisel 特征关键字，认为整段文本可能就是代码
-    # 这是为了挽救 SFT 后不写 Markdown 的模型输出
-    if "class " in text and "extends Module" in text:
-        # 尝试提取从 import 或 class 开始的代码
+    # [兜底策略] SFT 微调后模型通常直接输出代码，不使用 Markdown
+    # 如果文本包含 Chisel 特征，认为整段就是代码
+    if "import chisel3" in text and "extends Module" in text:
+        # 找到第一个 import 语句的位置
         lines = text.split('\n')
         code_start = -1
-        brace_count = 0
-        code_end = len(lines)
         
         for i, line in enumerate(lines):
             stripped = line.strip()
-            # 寻找代码起点
-            if code_start == -1:
-                if stripped.startswith('import ') or stripped.startswith('class '):
+            if stripped.startswith('import '):
+                code_start = i
+                break
+        
+        if code_start == -1:
+            # 如果没找到 import，从第一个 class 开始
+            for i, line in enumerate(lines):
+                if 'class ' in line and 'extends Module' in line:
                     code_start = i
-            
-            # 追踪大括号配对，找到模块结束点
-            if code_start != -1:
-                brace_count += line.count('{') - line.count('}')
-                if brace_count == 0 and i > code_start:
-                    code_end = i + 1
                     break
         
         if code_start != -1:
-            return '\n'.join(lines[code_start:code_end]).strip()
+            # 从起点开始，追踪大括号配对找到结束位置
+            brace_count = 0
+            code_end = len(lines)
+            found_opening = False
+            
+            for i in range(code_start, len(lines)):
+                line = lines[i]
+                brace_count += line.count('{') - line.count('}')
+                
+                # 标记是否已经遇到过左大括号
+                if '{' in line:
+                    found_opening = True
+                
+                # 如果已经遇到左大括号，且配对归零，说明模块结束
+                if found_opening and brace_count == 0:
+                    code_end = i + 1
+                    break
+            
+            extracted = '\n'.join(lines[code_start:code_end]).strip()
+            if extracted:
+                return extracted
         
-        # 如果无法精确定位，返回整个文本
+        # 如果提取失败，返回整段文本（可能整个输出就是代码）
         return text.strip()
     
-    # [兜底策略 2] 尝试提取以 import 开头的内容
-    lines = text.split('\n')
-    code_lines = []
-    in_code = False
-    
-    for line in lines:
-        if line.strip().startswith('import chisel3') or line.strip().startswith('class '):
-            in_code = True
-        if in_code:
-            code_lines.append(line)
-    
-    if code_lines:
-        return '\n'.join(code_lines).strip()
+    # 如果没有明显的 Chisel 特征，尝试查找任何 import/class 组合
+    if "import chisel3" in text or ("class " in text and "Module" in text):
+        return text.strip()
     
     return text  # 返回原文，让编译器报错
 
@@ -231,7 +238,7 @@ class TransformersModel(ModelInterface):
     """使用 transformers 库的本地模型"""
     
     def __init__(self, model_name: str, quantization: str = "4bit"):
-        from transformers import AutoModelForCausalLM, AutoTokenizer
+        from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
         import torch
         
         print(f"正在加载模型: {model_name} ({quantization} 量化)...")
@@ -241,15 +248,22 @@ class TransformersModel(ModelInterface):
         )
         
         load_kwargs = {
-            "torch_dtype": torch.bfloat16,
+            "dtype": torch.bfloat16,
             "device_map": "auto",
             "trust_remote_code": True,
         }
         
         if quantization == "4bit":
-            load_kwargs["load_in_4bit"] = True
+            load_kwargs["quantization_config"] = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_compute_dtype=torch.bfloat16,
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_quant_type="nf4"
+            )
         elif quantization == "8bit":
-            load_kwargs["load_in_8bit"] = True
+            load_kwargs["quantization_config"] = BitsAndBytesConfig(
+                load_in_8bit=True
+            )
         
         self.model = AutoModelForCausalLM.from_pretrained(model_name, **load_kwargs)
         print("模型加载完成!")
@@ -596,15 +610,18 @@ def main():
     def progress_callback(current, total, result):
         status = "✅" if result.get("passed") else "❌"
         stage = result.get("failed_stage", "passed")
-        print(f"[{current}/{total}] {result['id']} {status} ({stage})")
+        level = result.get("level", "L?")
+        category = result.get("category", "unknown")[:15]
+        print(f"[{current}/{total}] {level} | {category:15s} | {result['id']:20s} {status} ({stage})")
     
-    # 运行评估
-    print("\n开始评估...\n")
+    # 运行评估（默认显示进度）
+    print("\n开始评估...")
+    print("提示: 模型首次生成需要预热，第一个样本可能较慢 (~30-60秒)\n")
     results = run_evaluation(
         eval_set,
         model,
         verify=not args.no_verify,
-        progress_callback=progress_callback if args.verbose else None
+        progress_callback=progress_callback  # 默认启用进度显示
     )
     
     # 计算统计

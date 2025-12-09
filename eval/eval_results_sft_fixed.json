@@ -1,0 +1,774 @@
+{
+  "metadata": {
+    "eval_set": "eval/eval_set_v2.jsonl",
+    "model": "/home/silence_breaker/git/LLaMA-Factory/outputs/chisel-coder-lora",
+    "timestamp": "2025-12-07T20:08:53.260482",
+    "verify": true
+  },
+  "statistics": {
+    "total": 37,
+    "passed": 22,
+    "failed": 15,
+    "by_level": {
+      "L1-Basic": {
+        "total": 12,
+        "passed": 5,
+        "pass_rate": 0.4166666666666667
+      },
+      "L2-Combinational": {
+        "total": 14,
+        "passed": 11,
+        "pass_rate": 0.7857142857142857
+      },
+      "L3-Sequential": {
+        "total": 9,
+        "passed": 5,
+        "pass_rate": 0.5555555555555556
+      },
+      "L4-Advanced": {
+        "total": 2,
+        "passed": 1,
+        "pass_rate": 0.5
+      }
+    },
+    "by_category": {
+      "passthrough": {
+        "total": 5,
+        "passed": 5,
+        "pass_rate": 1.0
+      },
+      "wire_assign": {
+        "total": 4,
+        "passed": 0,
+        "pass_rate": 0.0
+      },
+      "reg_init": {
+        "total": 3,
+        "passed": 0,
+        "pass_rate": 0.0
+      },
+      "adder": {
+        "total": 3,
+        "passed": 0,
+        "pass_rate": 0.0
+      },
+      "mux2": {
+        "total": 3,
+        "passed": 3,
+        "pass_rate": 1.0
+      },
+      "comparator": {
+        "total": 4,
+        "passed": 4,
+        "pass_rate": 1.0
+      },
+      "bitwise": {
+        "total": 4,
+        "passed": 4,
+        "pass_rate": 1.0
+      },
+      "counter": {
+        "total": 3,
+        "passed": 3,
+        "pass_rate": 1.0
+      },
+      "shift_register": {
+        "total": 3,
+        "passed": 1,
+        "pass_rate": 0.3333333333333333
+      },
+      "edge_detector": {
+        "total": 2,
+        "passed": 1,
+        "pass_rate": 0.5
+      },
+      "fsm_simple": {
+        "total": 1,
+        "passed": 0,
+        "pass_rate": 0.0
+      },
+      "parameterized": {
+        "total": 1,
+        "passed": 1,
+        "pass_rate": 1.0
+      },
+      "valid_interface": {
+        "total": 1,
+        "passed": 0,
+        "pass_rate": 0.0
+      }
+    },
+    "by_failed_stage": {
+      "compilation": 15
+    },
+    "pass_rate": 0.5945945945945946
+  },
+  "results": [
+    {
+      "id": "L1-Basic_001",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 1-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughBit`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughBit extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val out = Output(Bool())\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughBit extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val out = Output(Bool())\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L1-Basic_002",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 8-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughByte`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughByte extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughByte extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L1-Basic_003",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 16-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughHalfWord`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughHalfWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(16.W))\n    val out = Output(UInt(16.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughHalfWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(16.W))\n    val out = Output(UInt(16.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L1-Basic_004",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 32-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughWord`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(32.W))\n    val out = Output(UInt(32.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(32.W))\n    val out = Output(UInt(32.W))\n  })\n  \n  // Logic: direct passthrough\n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L1-Basic_005",
+      "level": "L1-Basic",
+      "category": "passthrough",
+      "instruction": "I need a simple pass-through circuit. It should take a 64-bit input signal and directly forward it to the output without any modification. Name this module `PassthroughDoubleWord`.",
+      "raw_output": "import chisel3._\n\nclass PassthroughDoubleWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(64.W))\n    val out = Output(UInt(64.W))\n  })\n  \n  io.out := io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass PassthroughDoubleWord extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(64.W))\n    val out = Output(UInt(64.W))\n  })\n  \n  io.out := io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L1-Basic_006",
+      "level": "L1-Basic",
+      "category": "wire_assign",
+      "instruction": "Create a Chisel module called `WireZero` that outputs a constant value. Use an internal Wire to hold the value 0, and connect it to a 8-bit output port named `out`.",
+      "raw_output": "import chisel3._\n\nclass WireZero_697 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(8.W))\n  })\n  \n  val zero = Wire(UInt(8.W))\n  zero := 0.U\n  \n  io.out := zero\n}",
+      "extracted_code": "import chisel3._\n\nclass WireZero_697 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(8.W))\n  })\n  \n  val zero = Wire(UInt(8.W))\n  zero := 0.U\n  \n  io.out := zero\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmpwalx0gwg/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmpwalx0gwg/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmpwalx0gwg/chiselmodule/src/WireZero.scala:28:9: not found: type WireZero\n[error]     new WireZero(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L1-Basic_007",
+      "level": "L1-Basic",
+      "category": "wire_assign",
+      "instruction": "Create a Chisel module called `WireMax` that outputs a constant value. Use an internal Wire to hold the value 255, and connect it to a 8-bit output port named `out`.",
+      "raw_output": "import chisel3._\n\nclass WireMax_910 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(8.W))\n  })\n  \n  val maxVal = Wire(UInt(8.W))\n  maxVal := 255.U\n  \n  io.out := maxVal\n}",
+      "extracted_code": "import chisel3._\n\nclass WireMax_910 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(8.W))\n  })\n  \n  val maxVal = Wire(UInt(8.W))\n  maxVal := 255.U\n  \n  io.out := maxVal\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmpqgxvm_0a/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmpqgxvm_0a/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmpqgxvm_0a/chiselmodule/src/WireMax.scala:28:9: not found: type WireMax\n[error]     new WireMax(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L1-Basic_008",
+      "level": "L1-Basic",
+      "category": "wire_assign",
+      "instruction": "Create a Chisel module called `WireConst` that outputs a constant value. Use an internal Wire to hold the value 1234, and connect it to a 16-bit output port named `out`.",
+      "raw_output": "import chisel3._\n\nclass WireConst_598 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(16.W))\n  })\n  \n  val constVal = Wire(UInt(16.W))\n  constVal := 1234.U\n  \n  io.out := constVal\n}",
+      "extracted_code": "import chisel3._\n\nclass WireConst_598 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(16.W))\n  })\n  \n  val constVal = Wire(UInt(16.W))\n  constVal := 1234.U\n  \n  io.out := constVal\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmphv4cm3d_/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmphv4cm3d_/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmphv4cm3d_/chiselmodule/src/WireConst.scala:28:9: not found: type WireConst\n[error]     new WireConst(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L1-Basic_009",
+      "level": "L1-Basic",
+      "category": "wire_assign",
+      "instruction": "Create a Chisel module called `WireMagic` that outputs a constant value. Use an internal Wire to hold the value \"hDEADBEEF\", and connect it to a 32-bit output port named `out`.",
+      "raw_output": "import chisel3._\n\nclass WireMagic_607 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(32.W))\n  })\n  \n  val magicVal = Wire(UInt(32.W))\n  magicVal := 0xDEADBEEF.U\n  \n  io.out := magicVal\n}",
+      "extracted_code": "import chisel3._\n\nclass WireMagic_607 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(32.W))\n  })\n  \n  val magicVal = Wire(UInt(32.W))\n  magicVal := 0xDEADBEEF.U\n  \n  io.out := magicVal\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmptdv03bj3/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmptdv03bj3/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmptdv03bj3/chiselmodule/src/WireMagic.scala:28:9: not found: type WireMagic\n[error]     new WireMagic(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L1-Basic_010",
+      "level": "L1-Basic",
+      "category": "reg_init",
+      "instruction": "Implement a module `RegZero` containing a 8-bit register. The register should be initialized to 0 at reset and its value should be continuously output on a port named `out`.",
+      "raw_output": "import chisel3._\n\nclass RegZero_514 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(8.W))\n  })\n  \n  val reg = RegInit(0.U(8.W))\n  io.out := reg\n}",
+      "extracted_code": "import chisel3._\n\nclass RegZero_514 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(8.W))\n  })\n  \n  val reg = RegInit(0.U(8.W))\n  io.out := reg\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmp3p2ra7hi/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmp3p2ra7hi/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmp3p2ra7hi/chiselmodule/src/RegZero.scala:26:9: not found: type RegZero\n[error]     new RegZero(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L1-Basic_011",
+      "level": "L1-Basic",
+      "category": "reg_init",
+      "instruction": "Implement a module `RegHundred` containing a 8-bit register. The register should be initialized to 100 at reset and its value should be continuously output on a port named `out`.",
+      "raw_output": "import chisel3._\n\nclass RegHundred_645 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(8.W))\n  })\n  \n  val cnt = RegInit(100.U)\n  io.out := cnt\n}",
+      "extracted_code": "import chisel3._\n\nclass RegHundred_645 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(8.W))\n  })\n  \n  val cnt = RegInit(100.U)\n  io.out := cnt\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmpsuojnl6t/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmpsuojnl6t/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmpsuojnl6t/chiselmodule/src/RegHundred.scala:26:9: not found: type RegHundred\n[error]     new RegHundred(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L1-Basic_012",
+      "level": "L1-Basic",
+      "category": "reg_init",
+      "instruction": "Implement a module `RegAllOnes` containing a 16-bit register. The register should be initialized to 65535 at reset and its value should be continuously output on a port named `out`.",
+      "raw_output": "import chisel3._\n\nclass RegAllOnes_702 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(16.W))\n  })\n  \n  val reg = RegInit(65535.U)\n  io.out := reg\n}",
+      "extracted_code": "import chisel3._\n\nclass RegAllOnes_702 extends Module {\n  val io = IO(new Bundle {\n    val out = Output(UInt(16.W))\n  })\n  \n  val reg = RegInit(65535.U)\n  io.out := reg\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmpfrrjgdma/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmpfrrjgdma/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmpfrrjgdma/chiselmodule/src/RegAllOnes.scala:26:9: not found: type RegAllOnes\n[error]     new RegAllOnes(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L2-Combinational_013",
+      "level": "L2-Combinational",
+      "category": "adder",
+      "instruction": "Design an adder circuit named `Adder8bit`. It takes two 8-bit unsigned numbers as inputs (call them `a` and `b`) and produces their sum. Make the output `sum` 9 bits wide to handle potential overflow.",
+      "raw_output": "import chisel3._\n\nclass SimpleSum_560 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val sum = Output(UInt(9.W))\n  })\n  \n  // Logic: addition\n  io.sum := io.a + io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass SimpleSum_560 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val sum = Output(UInt(9.W))\n  })\n  \n  // Logic: addition\n  io.sum := io.a + io.b\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmpw15u2e0k/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmpw15u2e0k/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmpw15u2e0k/chiselmodule/src/Adder8bit.scala:28:9: not found: type Adder8bit\n[error]     new Adder8bit(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L2-Combinational_014",
+      "level": "L2-Combinational",
+      "category": "adder",
+      "instruction": "Design an adder circuit named `Adder16bit`. It takes two 16-bit unsigned numbers as inputs (call them `a` and `b`) and produces their sum. Make the output `sum` 17 bits wide to handle potential overflow.",
+      "raw_output": "import chisel3._\n\nclass SimpleSum_540 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(16.W))\n    val b = Input(UInt(16.W))\n    val sum = Output(UInt(17.W))\n  })\n  \n  // Logic: addition\n  io.sum := io.a + io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass SimpleSum_540 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(16.W))\n    val b = Input(UInt(16.W))\n    val sum = Output(UInt(17.W))\n  })\n  \n  // Logic: addition\n  io.sum := io.a + io.b\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmp0dm7dbjv/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmp0dm7dbjv/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmp0dm7dbjv/chiselmodule/src/Adder16bit.scala:28:9: not found: type Adder16bit\n[error]     new Adder16bit(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L2-Combinational_015",
+      "level": "L2-Combinational",
+      "category": "adder",
+      "instruction": "Design an adder circuit named `Adder32bit`. It takes two 32-bit unsigned numbers as inputs (call them `a` and `b`) and produces their sum. Make the output `sum` 33 bits wide to handle potential overflow.",
+      "raw_output": "import chisel3._\n\nclass LogicSum_815 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(32.W))\n    val b = Input(UInt(32.W))\n    val sum = Output(UInt(33.W))\n  })\n  \n  // Logic: addition\n  io.sum := io.a + io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass LogicSum_815 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(32.W))\n    val b = Input(UInt(32.W))\n    val sum = Output(UInt(33.W))\n  })\n  \n  // Logic: addition\n  io.sum := io.a + io.b\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmpxf0ceo1g/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmpxf0ceo1g/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmpxf0ceo1g/chiselmodule/src/Adder32bit.scala:28:9: not found: type Adder32bit\n[error]     new Adder32bit(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L2-Combinational_016",
+      "level": "L2-Combinational",
+      "category": "mux2",
+      "instruction": "Build a 2-to-1 multiplexer module called `Mux2to1_8bit`. It should have a boolean select signal `sel`, two 8-bit data inputs `a` and `b`, and a 8-bit output `out`. When the select is true, output should be `a`; otherwise it should be `b`.",
+      "raw_output": "import chisel3._\n\nclass Mux2to1_8bit extends Module {\n  val io = IO(new Bundle {\n    val sel = Input(Bool())\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: 2-to-1 Mux\n  io.out := Mux(io.sel, io.a, io.b)\n}",
+      "extracted_code": "import chisel3._\n\nclass Mux2to1_8bit extends Module {\n  val io = IO(new Bundle {\n    val sel = Input(Bool())\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: 2-to-1 Mux\n  io.out := Mux(io.sel, io.a, io.b)\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_017",
+      "level": "L2-Combinational",
+      "category": "mux2",
+      "instruction": "Build a 2-to-1 multiplexer module called `Mux2to1_16bit`. It should have a boolean select signal `sel`, two 16-bit data inputs `a` and `b`, and a 16-bit output `out`. When the select is true, output should be `a`; otherwise it should be `b`.",
+      "raw_output": "import chisel3._\n\nclass Mux2to1_16bit extends Module {\n  val io = IO(new Bundle {\n    val sel = Input(Bool())\n    val a = Input(UInt(16.W))\n    val b = Input(UInt(16.W))\n    val out = Output(UInt(16.W))\n  })\n  \n  // Logic: 2-to-1 Mux\n  io.out := Mux(io.sel, io.a, io.b)\n}",
+      "extracted_code": "import chisel3._\n\nclass Mux2to1_16bit extends Module {\n  val io = IO(new Bundle {\n    val sel = Input(Bool())\n    val a = Input(UInt(16.W))\n    val b = Input(UInt(16.W))\n    val out = Output(UInt(16.W))\n  })\n  \n  // Logic: 2-to-1 Mux\n  io.out := Mux(io.sel, io.a, io.b)\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_018",
+      "level": "L2-Combinational",
+      "category": "mux2",
+      "instruction": "Build a 2-to-1 multiplexer module called `Mux2to1_32bit`. It should have a boolean select signal `sel`, two 32-bit data inputs `a` and `b`, and a 32-bit output `out`. When the select is true, output should be `a`; otherwise it should be `b`.",
+      "raw_output": "import chisel3._\n\nclass Mux2to1_32bit extends Module {\n  val io = IO(new Bundle {\n    val sel = Input(Bool())\n    val a = Input(UInt(32.W))\n    val b = Input(UInt(32.W))\n    val out = Output(UInt(32.W))\n  })\n  \n  // Logic: 2-to-1 Mux\n  io.out := Mux(io.sel, io.a, io.b)\n}",
+      "extracted_code": "import chisel3._\n\nclass Mux2to1_32bit extends Module {\n  val io = IO(new Bundle {\n    val sel = Input(Bool())\n    val a = Input(UInt(32.W))\n    val b = Input(UInt(32.W))\n    val out = Output(UInt(32.W))\n  })\n  \n  // Logic: 2-to-1 Mux\n  io.out := Mux(io.sel, io.a, io.b)\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_019",
+      "level": "L2-Combinational",
+      "category": "comparator",
+      "instruction": "I need a comparator module `ComparatorEq8` that checks if one 8-bit value is equal to another. Inputs should be named `a` and `b`, and the boolean output `result` indicates whether the comparison is true.",
+      "raw_output": "import chisel3._\n\nclass ComparatorEq8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val result = Output(Bool())\n  })\n  \n  // Logic: equality check\n  io.result := io.a === io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass ComparatorEq8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val result = Output(Bool())\n  })\n  \n  // Logic: equality check\n  io.result := io.a === io.b\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_020",
+      "level": "L2-Combinational",
+      "category": "comparator",
+      "instruction": "I need a comparator module `ComparatorGt8` that checks if one 8-bit value is greater than another. Inputs should be named `a` and `b`, and the boolean output `result` indicates whether the comparison is true.",
+      "raw_output": "import chisel3._\n\nclass ComparatorGt8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val result = Output(Bool())\n  })\n  \n  // Logic: greater than\n  io.result := io.a > io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass ComparatorGt8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val result = Output(Bool())\n  })\n  \n  // Logic: greater than\n  io.result := io.a > io.b\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_021",
+      "level": "L2-Combinational",
+      "category": "comparator",
+      "instruction": "I need a comparator module `ComparatorLt8` that checks if one 8-bit value is less than another. Inputs should be named `a` and `b`, and the boolean output `result` indicates whether the comparison is true.",
+      "raw_output": "import chisel3._\n\nclass ComparatorLt8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val result = Output(Bool())\n  })\n  \n  // Logic: less than\n  io.result := io.a < io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass ComparatorLt8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val result = Output(Bool())\n  })\n  \n  // Logic: less than\n  io.result := io.a < io.b\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_022",
+      "level": "L2-Combinational",
+      "category": "comparator",
+      "instruction": "I need a comparator module `ComparatorEq16` that checks if one 16-bit value is equal to another. Inputs should be named `a` and `b`, and the boolean output `result` indicates whether the comparison is true.",
+      "raw_output": "import chisel3._\n\nclass ComparatorEq16 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(16.W))\n    val b = Input(UInt(16.W))\n    val result = Output(Bool())\n  })\n  \n  // Logic: equality check\n  io.result := io.a === io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass ComparatorEq16 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(16.W))\n    val b = Input(UInt(16.W))\n    val result = Output(Bool())\n  })\n  \n  // Logic: equality check\n  io.result := io.a === io.b\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_023",
+      "level": "L2-Combinational",
+      "category": "bitwise",
+      "instruction": "Create a bitwise AND gate module named `BitwiseAnd8`. It should perform bitwise AND operation on two 8-bit inputs `a` and `b`, producing a 8-bit output `out`.",
+      "raw_output": "import chisel3._\n\nclass BitwiseAnd8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: bitwise AND\n  io.out := io.a & io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass BitwiseAnd8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: bitwise AND\n  io.out := io.a & io.b\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_024",
+      "level": "L2-Combinational",
+      "category": "bitwise",
+      "instruction": "Create a bitwise OR gate module named `BitwiseOr8`. It should perform bitwise OR operation on two 8-bit inputs `a` and `b`, producing a 8-bit output `out`.",
+      "raw_output": "import chisel3._\n\nclass BitwiseOr8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: bitwise OR\n  io.out := io.a | io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass BitwiseOr8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: bitwise OR\n  io.out := io.a | io.b\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_025",
+      "level": "L2-Combinational",
+      "category": "bitwise",
+      "instruction": "Create a bitwise XOR gate module named `BitwiseXor8`. It should perform bitwise XOR operation on two 8-bit inputs `a` and `b`, producing a 8-bit output `out`.",
+      "raw_output": "import chisel3._\n\nclass BitwiseXor8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: bitwise XOR\n  io.out := io.a ^ io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass BitwiseXor8 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  // Logic: bitwise XOR\n  io.out := io.a ^ io.b\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L2-Combinational_026",
+      "level": "L2-Combinational",
+      "category": "bitwise",
+      "instruction": "Create a bitwise AND gate module named `BitwiseAnd16`. It should perform bitwise AND operation on two 16-bit inputs `a` and `b`, producing a 16-bit output `out`.",
+      "raw_output": "import chisel3._\n\nclass BitwiseAnd16 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(16.W))\n    val b = Input(UInt(16.W))\n    val out = Output(UInt(16.W))\n  })\n  \n  // Logic: bitwise AND\n  io.out := io.a & io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass BitwiseAnd16 extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(16.W))\n    val b = Input(UInt(16.W))\n    val out = Output(UInt(16.W))\n  })\n  \n  // Logic: bitwise AND\n  io.out := io.a & io.b\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L3-Sequential_027",
+      "level": "L3-Sequential",
+      "category": "counter",
+      "instruction": "Design a 4-bit up-counter module named `Counter4bit`. The counter should only increment when an enable signal `en` is high. Output the current count value on a port called `count`.",
+      "raw_output": "import chisel3._\n\nclass Counter4bit extends Module {\n  val io = IO(new Bundle {\n    val en = Input(Bool())\n    val count = Output(UInt(4.W))\n  })\n  \n  val cnt = RegInit(0.U(4.W))\n  \n  when (io.en) {\n    cnt := cnt + 1.U\n  }\n  \n  io.count := cnt\n}",
+      "extracted_code": "import chisel3._\n\nclass Counter4bit extends Module {\n  val io = IO(new Bundle {\n    val en = Input(Bool())\n    val count = Output(UInt(4.W))\n  })\n  \n  val cnt = RegInit(0.U(4.W))\n  \n  when (io.en) {\n    cnt := cnt + 1.U\n  }\n  \n  io.count := cnt\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L3-Sequential_028",
+      "level": "L3-Sequential",
+      "category": "counter",
+      "instruction": "Design a 8-bit up-counter module named `Counter8bit`. The counter should only increment when an enable signal `en` is high. Output the current count value on a port called `count`.",
+      "raw_output": "import chisel3._\n\nclass Counter8bit extends Module {\n  val io = IO(new Bundle {\n    val en = Input(Bool())\n    val count = Output(UInt(8.W))\n  })\n  \n  val cnt = RegInit(0.U(8.W))\n  \n  when (io.en) {\n    cnt := cnt + 1.U\n  }\n  \n  io.count := cnt\n}",
+      "extracted_code": "import chisel3._\n\nclass Counter8bit extends Module {\n  val io = IO(new Bundle {\n    val en = Input(Bool())\n    val count = Output(UInt(8.W))\n  })\n  \n  val cnt = RegInit(0.U(8.W))\n  \n  when (io.en) {\n    cnt := cnt + 1.U\n  }\n  \n  io.count := cnt\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L3-Sequential_029",
+      "level": "L3-Sequential",
+      "category": "counter",
+      "instruction": "Design a 8-bit up-counter module named `CounterMod100`. The counter should only increment when an enable signal `en` is high. Output the current count value on a port called `count`.",
+      "raw_output": "import chisel3._\n\nclass CounterMod100 extends Module {\n  val io = IO(new Bundle {\n    val en = Input(Bool())\n    val count = Output(UInt(8.W))\n  })\n  \n  val cnt = RegInit(0.U(8.W))\n  \n  when (io.en) {\n    cnt := cnt + 1.U\n  }\n  \n  io.count := cnt\n}",
+      "extracted_code": "import chisel3._\n\nclass CounterMod100 extends Module {\n  val io = IO(new Bundle {\n    val en = Input(Bool())\n    val count = Output(UInt(8.W))\n  })\n  \n  val cnt = RegInit(0.U(8.W))\n  \n  when (io.en) {\n    cnt := cnt + 1.U\n  }\n  \n  io.count := cnt\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L3-Sequential_030",
+      "level": "L3-Sequential",
+      "category": "shift_register",
+      "instruction": "Implement a 4-stage shift register called `ShiftReg4stage`. Each stage holds 1-bit data. Data enters through input `in` and exits through output `out` after 4 clock cycles of delay.",
+      "raw_output": "import chisel3._\n\nclass SyncDelayLine_506 extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val out = Output(Bool())\n  })\n  \n  val r1 = RegNext(io.in)\n  val r2 = RegNext(r1)\n  val r3 = RegNext(r2)\n  val r4 = RegNext(r3)\n  \n  io.out := r4\n}",
+      "extracted_code": "import chisel3._\n\nclass SyncDelayLine_506 extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val out = Output(Bool())\n  })\n  \n  val r1 = RegNext(io.in)\n  val r2 = RegNext(r1)\n  val r3 = RegNext(r2)\n  val r4 = RegNext(r3)\n  \n  io.out := r4\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmplns6_2ow/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmplns6_2ow/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmplns6_2ow/chiselmodule/src/ShiftReg4stage.scala:31:9: not found: type ShiftReg4stage\n[error]     new ShiftReg4stage(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L3-Sequential_031",
+      "level": "L3-Sequential",
+      "category": "shift_register",
+      "instruction": "Implement a 8-stage shift register called `ShiftReg8stage`. Each stage holds 1-bit data. Data enters through input `in` and exits through output `out` after 8 clock cycles of delay.",
+      "raw_output": "import chisel3._\n\nclass SyncBuffer_569 extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val out = Output(Bool())\n  })\n  \n  val regs = RegInit(0.U(8.W))\n  regs := Cat(regs(6, 0), io.in)\n  io.out := regs(7)\n}",
+      "extracted_code": "import chisel3._\n\nclass SyncBuffer_569 extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val out = Output(Bool())\n  })\n  \n  val regs = RegInit(0.U(8.W))\n  regs := Cat(regs(6, 0), io.in)\n  io.out := regs(7)\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmpbnsxhfbp/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmpbnsxhfbp/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmpbnsxhfbp/chiselmodule/src/ShiftReg8stage.scala:16:11: not found: value Cat\n[error]   regs := Cat(regs(6, 0), io.in)\n[error]           ^\n[error] /tmp/tmpbnsxhfbp/chiselmodule/src/ShiftReg8stage.scala:28:9: not found: type ShiftReg8stage\n[error]     new ShiftReg8stage(),\n[error]         ^\n[error] two errors found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L3-Sequential_032",
+      "level": "L3-Sequential",
+      "category": "shift_register",
+      "instruction": "Implement a 4-stage shift register called `ShiftReg4stage_8bit`. Each stage holds 8-bit data. Data enters through input `in` and exits through output `out` after 4 clock cycles of delay.",
+      "raw_output": "import chisel3._\n\nclass ShiftReg4stage_8bit extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  val r1 = RegNext(io.in)\n  val r2 = RegNext(r1)\n  val r3 = RegNext(r2)\n  val r4 = RegNext(r3)\n  \n  io.out := r4\n}",
+      "extracted_code": "import chisel3._\n\nclass ShiftReg4stage_8bit extends Module {\n  val io = IO(new Bundle {\n    val in = Input(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  val r1 = RegNext(io.in)\n  val r2 = RegNext(r1)\n  val r3 = RegNext(r2)\n  val r4 = RegNext(r3)\n  \n  io.out := r4\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L3-Sequential_033",
+      "level": "L3-Sequential",
+      "category": "edge_detector",
+      "instruction": "Create a rising edge detector module named `RisingEdge`. It monitors an input signal `in` and outputs a one-cycle pulse on `detected` whenever the input transitions from low to high.",
+      "raw_output": "import chisel3._\n\nclass RisingEdge extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val detected = Output(Bool())\n  })\n  \n  val prev = RegNext(io.in)\n  io.detected := !prev && io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass RisingEdge extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val detected = Output(Bool())\n  })\n  \n  val prev = RegNext(io.in)\n  io.detected := !prev && io.in\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L3-Sequential_034",
+      "level": "L3-Sequential",
+      "category": "edge_detector",
+      "instruction": "Create a falling edge detector module named `FallingEdge`. It monitors an input signal `in` and outputs a one-cycle pulse on `detected` whenever the input transitions from high to low.",
+      "raw_output": "import chisel3._\n\nclass FallingEdge_490 extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val detected = Output(Bool())\n  })\n  \n  val prev = RegNext(io.in)\n  io.detected := prev && !io.in\n}",
+      "extracted_code": "import chisel3._\n\nclass FallingEdge_490 extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Bool())\n    val detected = Output(Bool())\n  })\n  \n  val prev = RegNext(io.in)\n  io.detected := prev && !io.in\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmpptpva4p2/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmpptpva4p2/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmpptpva4p2/chiselmodule/src/FallingEdge.scala:27:9: not found: type FallingEdge\n[error]     new FallingEdge(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L3-Sequential_035",
+      "level": "L3-Sequential",
+      "category": "fsm_simple",
+      "instruction": "Implement a simple 2-state finite state machine called `FSMOnOff`. It has two states: OFF and ON. A `toggle` input causes the FSM to switch between states. The current state should be output on a boolean port `state` (false for OFF, true for ON).",
+      "raw_output": "import chisel3._\nimport chisel3.util._\n\nclass SimpleToggleFSM_51 extends Module {\n  val io = IO(new Bundle {\n    val toggle = Input(Bool())\n    val state = Output(Bool())\n  })\n  \n  // Define states using Enum list destructuring\n  val sOff :: sOn :: Nil = Enum(2)\n  val stateReg = RegInit(sOff)\n  \n  // State transition logic\n  switch (stateReg) {\n    is (sOff) {\n      when (io.toggle) {\n        stateReg := sOn\n      }\n    }\n    is (sOn) {\n      when (io.toggle) {\n        stateReg := sOff\n      }\n    }\n  }\n  \n  io.state := stateReg === sOn\n}",
+      "extracted_code": "import chisel3._\nimport chisel3.util._\n\nclass SimpleToggleFSM_51 extends Module {\n  val io = IO(new Bundle {\n    val toggle = Input(Bool())\n    val state = Output(Bool())\n  })\n  \n  // Define states using Enum list destructuring\n  val sOff :: sOn :: Nil = Enum(2)\n  val stateReg = RegInit(sOff)\n  \n  // State transition logic\n  switch (stateReg) {\n    is (sOff) {\n      when (io.toggle) {\n        stateReg := sOn\n      }\n    }\n    is (sOn) {\n      when (io.toggle) {\n        stateReg := sOff\n      }\n    }\n  }\n  \n  io.state := stateReg === sOn\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmpzblv4t_e/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmpzblv4t_e/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmpzblv4t_e/chiselmodule/src/FSMOnOff.scala:45:9: not found: type FSMOnOff\n[error]     new FSMOnOff(),\n[error]         ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    },
+    {
+      "id": "L4-Advanced_036",
+      "level": "L4-Advanced",
+      "category": "parameterized",
+      "instruction": "I need a flexible adder that works with different bit widths. Create a parameterized Chisel module called `ParamAdder` that accepts a width parameter (use 8 as the default value). The module should add two inputs `a` and `b` of the specified width and produce a sum output that is one bit wider to prevent overflow. Important: the width parameter must have a default value so the module can be instantiated without arguments.",
+      "raw_output": "import chisel3._\n\nclass ParamAdder extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(9.W))\n  })\n  \n  // Logic: add a and b\n  io.out := io.a + io.b\n}",
+      "extracted_code": "import chisel3._\n\nclass ParamAdder extends Module {\n  val io = IO(new Bundle {\n    val a = Input(UInt(8.W))\n    val b = Input(UInt(8.W))\n    val out = Output(UInt(9.W))\n  })\n  \n  // Logic: add a and b\n  io.out := io.a + io.b\n}",
+      "verify_result": {
+        "success": true,
+        "compiled": true,
+        "elaborated": true,
+        "stage": "passed",
+        "error_log": null,
+        "verilog": ""
+      },
+      "passed": true,
+      "failed_stage": null
+    },
+    {
+      "id": "L4-Advanced_037",
+      "level": "L4-Advanced",
+      "category": "valid_interface",
+      "instruction": "Build a module called `ValidReg8bit` that uses Chisel's Valid interface. The module should have a Valid input carrying 8-bit data. When the valid signal is asserted, store the incoming data in a register. Output the register contents continuously on a port named `out`.",
+      "raw_output": "import chisel3._\nimport chisel3.util.Valid\n\nclass ValidReg8bit_509 extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Valid(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  val reg = RegInit(0.U(8.W))\n  \n  when (io.in.valid) {\n    reg := io.in.bits\n  }\n  \n  io.out := reg\n}",
+      "extracted_code": "import chisel3._\nimport chisel3.util.Valid\n\nclass ValidReg8bit_509 extends Module {\n  val io = IO(new Bundle {\n    val in = Input(Valid(UInt(8.W))\n    val out = Output(UInt(8.W))\n  })\n  \n  val reg = RegInit(0.U(8.W))\n  \n  when (io.in.valid) {\n    reg := io.in.bits\n  }\n  \n  io.out := reg\n}",
+      "verify_result": {
+        "success": false,
+        "compiled": false,
+        "elaborated": false,
+        "stage": "compilation",
+        "error_log": "Compilation Error:\n[info] compiling 1 Scala source to /tmp/tmp21zp7ayq/out/mill-build/compile.dest/classes ...\n[info] done compiling\n[info] compiling 1 Scala source to /tmp/tmp21zp7ayq/out/chiselmodule/compile.dest/classes ...\n[error] /tmp/tmp21zp7ayq/chiselmodule/src/ValidReg8bit.scala:13:5: ')' expected but 'val' found.\n[error]     val out = Output(UInt(8.W))\n[error]     ^\n[error] one error found\n1 targets failed\nchiselmodule.compile Compilation failed\n",
+        "verilog": ""
+      },
+      "passed": false,
+      "failed_stage": "compilation"
+    }
+  ]
+}
