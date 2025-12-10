@@ -16,7 +16,8 @@
       pkgs.gcc
       pkgs.python311Packages.pyngrok
       # 👇👇👇 核心修复：添加 CIRCT 工具链 (包含 firtool)
-      pkgs.circt 
+      pkgs.circt
+      pkgs.streamlit 
     ];
 
   # 2. 环境变量

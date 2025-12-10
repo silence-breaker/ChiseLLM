@@ -182,10 +182,12 @@ if "last_code" not in st.session_state:
 if "last_testbench" not in st.session_state:
     st.session_state.last_testbench = None
 
+# ... 上面的代码保持不变 ...
+
 # ==================== 主界面 ====================
 col_chat, col_code = st.columns([1, 1])
 
-# --- 左侧对话区 ---
+# --- 左侧对话区 (仅用于显示历史消息) ---
 with col_chat:
     st.subheader("💬 需求对话")
     
@@ -194,8 +196,11 @@ with col_chat:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # 用户输入
-    if prompt := st.chat_input("请输入设计需求 (例如：写一个带同步复位的8位寄存器)"):
+# --- 输入框必须放在最外层 (取消缩进) ---
+if prompt := st.chat_input("请输入设计需求 (例如：写一个带同步复位的8位寄存器)"):
+    
+    # 检测到输入后，为了让交互显示在左侧，我们在这里重新指定列
+    with col_chat:
         if not api_key:
             st.error("请先在左侧输入 API Key！")
             st.stop()
@@ -209,12 +214,14 @@ with col_chat:
             
             # 使用工厂方法创建 Agent
             try:
+                # ... 下面的代码保持原样，只需确保缩进正确 ...
                 agent = ChiselAgent.from_config(
                     provider_type=provider_type,
                     api_key=api_key,
                     model_name=model_name,
                     base_url=base_url
                 )
+            # ... (后续所有代码直到文件结束都需要保持在这个 with col_chat: 的缩进里) ...
             except Exception as e:
                 st.error(f"创建 Agent 失败: {str(e)}")
                 st.stop()
