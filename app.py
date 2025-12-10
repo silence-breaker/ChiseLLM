@@ -28,70 +28,72 @@ st.caption("AI 驱动的 Chisel 硬件设计生成与验证平台")
 with st.sidebar:
     st.header("🔧 API 配置")
     
-    # 检查是否有默认配置
+    # 检查是否有默认配置 (服务器端预设的测试 API)
     has_default = hasattr(st, 'secrets') and 'default' in st.secrets
     
-    # 使用默认配置的开关
+    # 使用测试配置的开关 - 允许外部用户使用预设 API
     use_default = st.checkbox(
         "🚀 使用测试配置", 
         value=has_default,
-        help="勾选后自动填充测试用的 API 配置",
+        help="使用服务器预设的测试 API，无需自行配置" if has_default else "服务器未配置测试 API",
         disabled=not has_default
     )
     
-    # Provider 选择
-    provider_options = {
-        "siliconflow": "🔮 SiliconFlow (测试推荐)",
-        "gemini": "🌟 Google Gemini",
-        "openai": "🟢 OpenAI (GPT)",
-        "qwen": "🔮 Qwen (通义千问)",
-        "deepseek": "🔷 DeepSeek",
-        "claude": "🟣 Anthropic Claude",
-        "custom": "⚙️ 自定义 OpenAI 兼容"
-    }
-    
-    # 默认选择 siliconflow
-    default_provider = "siliconflow" if use_default else "gemini"
-    provider_type = st.selectbox(
-        "选择 API 类型",
-        options=list(provider_options.keys()),
-        format_func=lambda x: provider_options[x],
-        index=list(provider_options.keys()).index(default_provider)
-    )
-    
-    # API Key 输入 - 只有使用测试配置 + SiliconFlow 时才隐藏
-    if use_default and has_default and provider_type == "siliconflow":
+    # ========== 测试配置模式 ==========
+    if use_default and has_default:
+        # 从 secrets 加载配置 (用户看不到具体内容)
         api_key = st.secrets["default"]["api_key"]
-        st.text_input(
-            "API Key", 
-            value="••••••••••••••••••••",
-            type="password",
-            disabled=True,
-            help="使用测试配置中的 API Key"
-        )
+        base_url = st.secrets["default"]["base_url"]
+        model_name = st.secrets["default"]["model_name"]
+        provider_type = "custom"  # SiliconFlow 使用 custom 类型
+        display_provider_type = "siliconflow"
+        
+        # 显示友好的配置摘要 (不暴露敏感信息)
+        st.info("📡 **测试模式已启用**")
+        st.markdown(f"""
+        - **API**: SiliconFlow  
+        - **模型**: `{model_name.split('/')[-1]}`  
+        - **状态**: ✅ 已就绪
+        """)
+        
+        st.caption("💡 测试配置由服务器提供，可直接使用")
+        
+    # ========== 自定义配置模式 ==========
     else:
+        # Provider 选择
+        provider_options = {
+            "gemini": "🌟 Google Gemini",
+            "openai": "🟢 OpenAI (GPT)",
+            "qwen": "🔮 Qwen (通义千问)",
+            "deepseek": "🔷 DeepSeek",
+            "siliconflow": "🔮 SiliconFlow",
+            "claude": "🟣 Anthropic Claude",
+            "custom": "⚙️ 自定义 OpenAI 兼容"
+        }
+        
+        provider_type = st.selectbox(
+            "选择 API 类型",
+            options=list(provider_options.keys()),
+            format_func=lambda x: provider_options[x]
+        )
+        
+        # API Key 输入
         api_key = st.text_input(
             "API Key", 
             type="password", 
             help="输入对应平台的 API Key"
         )
-    
-    # 获取当前 Provider 配置
-    provider_config = PROVIDER_CONFIGS.get(provider_type, {})
-    
-    # 保存原始 provider_type 用于显示
-    display_provider_type = provider_type
-    
-    # Base URL 和模型配置
-    base_url = None
-    if provider_type == "siliconflow":
-        # SiliconFlow 特殊配置
-        if use_default and has_default:
-            base_url = st.secrets["default"]["base_url"]
-            model_name = st.secrets["default"]["model_name"]
-            st.text_input("API Base URL", value=base_url, disabled=True)
-            st.text_input("模型名称", value=model_name, disabled=True)
-        else:
+        
+        # 获取当前 Provider 配置
+        provider_config = PROVIDER_CONFIGS.get(provider_type, {})
+        
+        # 保存原始 provider_type 用于显示
+        display_provider_type = provider_type
+        
+        # Base URL 和模型配置
+        base_url = None
+        if provider_type == "siliconflow":
+            # SiliconFlow 特殊配置
             base_url = st.text_input(
                 "API Base URL",
                 value="https://api.siliconflow.cn/v1",
@@ -102,41 +104,44 @@ with st.sidebar:
                 value="deepseek-ai/DeepSeek-V3",
                 help="SiliconFlow 支持的模型"
             )
-        # 实际使用 custom 类型处理
-        provider_type = "custom"
-    elif provider_type == "custom":
-        base_url = st.text_input(
-            "API Base URL",
-            value="https://api.openai.com/v1",
-            help="OpenAI 兼容 API 的 Base URL"
-        )
-        custom_model = st.text_input(
-            "模型名称",
-            value="gpt-3.5-turbo",
-            help="自定义模型名称"
-        )
-        model_name = custom_model
-    else:
-        # 模型选择 (根据 Provider 动态更新)
-        models = provider_config.get("models", [])
-        default_model = provider_config.get("default_model", "")
-        
-        if models:
-            model_name = st.selectbox(
-                "选择模型",
-                options=models,
-                index=models.index(default_model) if default_model in models else 0
+            # 实际使用 custom 类型处理
+            provider_type = "custom"
+        elif provider_type == "custom":
+            base_url = st.text_input(
+                "API Base URL",
+                value="https://api.openai.com/v1",
+                help="OpenAI 兼容 API 的 Base URL"
             )
+            custom_model = st.text_input(
+                "模型名称",
+                value="gpt-3.5-turbo",
+                help="自定义模型名称"
+            )
+            model_name = custom_model
         else:
-            model_name = st.text_input("模型名称", value=default_model)
+            # 模型选择 (根据 Provider 动态更新)
+            models = provider_config.get("models", [])
+            default_model = provider_config.get("default_model", "")
+            
+            if models:
+                model_name = st.selectbox(
+                    "选择模型",
+                    options=models,
+                    index=models.index(default_model) if default_model in models else 0
+                )
+            else:
+                model_name = st.text_input("模型名称", value=default_model)
     
     st.divider()
     
     # 显示当前配置状态
-    if api_key:
-        st.success(f"✅ 已配置 {provider_options[display_provider_type]}")
+    if use_default and has_default:
+        st.success("✅ 测试配置已就绪，可直接使用")
+    elif api_key:
+        provider_display = provider_options.get(display_provider_type, display_provider_type)
+        st.success(f"✅ 已配置 {provider_display}")
     else:
-        st.warning("⚠️ 请输入 API Key")
+        st.warning("⚠️ 请输入 API Key 或启用测试配置")
     
     # 帮助信息
     with st.expander("📘 API 获取指南"):
