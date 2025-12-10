@@ -16,7 +16,7 @@ import json
 def vcd_to_wavedrom(
     vcd_file: str,
     signals: Optional[List[str]] = None,
-    max_cycles: int = 50,
+    max_cycles: int = 30,
     clock_signal: str = "clock"
 ) -> Dict[str, Any]:
     """
@@ -25,7 +25,7 @@ def vcd_to_wavedrom(
     Args:
         vcd_file: VCD 文件路径
         signals: 要显示的信号列表 (None 表示全部)
-        max_cycles: 最大显示周期数
+        max_cycles: 最大显示周期数 (默认 30，适合显示)
         clock_signal: 时钟信号名称
         
     Returns:
@@ -36,18 +36,28 @@ def vcd_to_wavedrom(
     except Exception as e:
         return {"error": f"无法解析 VCD 文件: {str(e)}"}
     
-    # 获取所有信号
-    all_signals = list(vcd.signals.keys())
+    # 获取所有信号 (vcd.signals 是列表)
+    all_signals = vcd.signals if isinstance(vcd.signals, list) else list(vcd.signals.keys())
     
     if not all_signals:
         return {"error": "VCD 文件中未找到信号"}
     
-    # 如果未指定信号，使用所有信号
+    # 按短名称去重，避免同一信号因层级路径不同而重复显示
+    # 例如 TOP.Module.clock 和 TOP.Module.Module.clock 实际上是同一个信号
+    seen_short_names = set()
+    unique_signals = []
+    for s in all_signals:
+        short_name = s.split(".")[-1]
+        if short_name not in seen_short_names:
+            seen_short_names.add(short_name)
+            unique_signals.append(s)
+    
+    # 如果未指定信号，使用去重后的信号
     if signals is None:
-        signals = all_signals
+        signals = unique_signals
     
     # 过滤有效信号
-    valid_signals = [s for s in signals if s in vcd.signals]
+    valid_signals = [s for s in signals if s in all_signals]
     
     if not valid_signals:
         return {"error": f"未找到指定的信号。可用信号: {all_signals[:10]}"}
@@ -69,19 +79,27 @@ def vcd_to_wavedrom(
         if not tv_pairs:
             continue
         
-        # 确定位宽
-        bit_width = signal.size
+        # 确定位宽 (确保是整数)
+        try:
+            bit_width = int(signal.size) if signal.size else 1
+        except (ValueError, TypeError):
+            bit_width = 1
         is_bus = bit_width > 1
         
         # 采样信号值 (简化：按固定间隔采样)
         sample_times = list(range(0, max_cycles * 10, 10))[:max_cycles]
         
         prev_value = None
-        for t in sample_times:
+        for i, t in enumerate(sample_times):
             # 找到该时间点的值
             current_value = None
             for tv_time, tv_value in tv_pairs:
-                if tv_time <= t:
+                # 确保 tv_time 是整数进行比较
+                try:
+                    tv_time_int = int(tv_time)
+                except (ValueError, TypeError):
+                    tv_time_int = 0
+                if tv_time_int <= t:
                     current_value = tv_value
                 else:
                     break
@@ -90,12 +108,12 @@ def vcd_to_wavedrom(
                 current_value = tv_pairs[0][1] if tv_pairs else "x"
             
             if is_bus:
-                # 多位信号：使用 "=" 表示数据
+                # 多位信号：使用 "=" 表示数据变化，"." 表示保持
                 if current_value != prev_value:
                     wave_str += "="
                     # 转换值为十六进制
                     try:
-                        if current_value.startswith("b"):
+                        if isinstance(current_value, str) and current_value.startswith("b"):
                             hex_val = hex(int(current_value[1:], 2))[2:].upper()
                         else:
                             hex_val = str(current_value)
@@ -105,14 +123,18 @@ def vcd_to_wavedrom(
                 else:
                     wave_str += "."
             else:
-                # 单位信号
-                if current_value == "1":
-                    wave_str += "1"
-                elif current_value == "0":
-                    wave_str += "0"
-                elif current_value == "x":
-                    wave_str += "x"
+                # 单位信号：第一个采样点或值变化时写入实际值，否则用 "." 延续
+                if i == 0 or current_value != prev_value:
+                    if current_value == "1":
+                        wave_str += "1"
+                    elif current_value == "0":
+                        wave_str += "0"
+                    elif current_value == "x":
+                        wave_str += "x"
+                    else:
+                        wave_str += "."
                 else:
+                    # 保持不变，使用 "." 延续
                     wave_str += "."
             
             prev_value = current_value
@@ -134,15 +156,21 @@ def vcd_to_wavedrom(
         clock_wave = "p" + "." * (max_cycles - 1)
         wavedrom_signals.insert(0, {"name": "clk", "wave": clock_wave})
     
-    # 构建 WaveDrom JSON
+    # 构建 WaveDrom JSON (使用更清晰的配置)
     wavedrom_json = {
         "signal": wavedrom_signals,
+        "config": {
+            "hscale": 2,  # 水平缩放，让波形更宽
+            "skin": "default"
+        },
         "head": {
-            "text": "Waveform",
-            "tick": 0
+            "text": ["tspan", {"class": "h3"}, "Simulation Waveform"],
+            "tick": 0,
+            "every": 5
         },
         "foot": {
-            "text": f"Timescale: {timescale}"
+            "text": f"Timescale: {timescale}",
+            "tick": 0
         }
     }
     
@@ -169,20 +197,31 @@ def generate_wavedrom_html(wavedrom_json: Dict[str, Any], height: int = 300) -> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/skins/default.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavedrom/3.1.0/wavedrom.min.js"></script>
     <style>
-        body {{
+        * {{
             margin: 0;
-            padding: 10px;
-            background: #1e1e1e;
-            font-family: 'Segoe UI', sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+        body {{
+            background: #ffffff;
+            font-family: 'Consolas', 'Monaco', monospace;
+            padding: 16px;
         }}
         #waveform {{
-            background: #2d2d2d;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
-            padding: 15px;
+            padding: 20px;
             overflow-x: auto;
+            min-height: {height}px;
         }}
+        /* WaveDrom 样式覆盖 */
         svg {{
-            max-width: 100%;
+            font-family: 'Consolas', 'Monaco', monospace !important;
+        }}
+        svg text {{
+            font-size: 12px !important;
+            fill: #333 !important;
         }}
     </style>
 </head>

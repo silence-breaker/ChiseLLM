@@ -26,6 +26,82 @@ CHISEL_SYSTEM_PROMPT = """你是一位 Chisel 硬件设计专家。你的任务�
 6. 仅输出 Module 定义，不要包含 package 声明。
 """
 
+TESTBENCH_SYSTEM_PROMPT = """你是一位硬件验证专家，擅长为 Chisel/Verilog 模块编写 C++ Testbench (基于 Verilator)。
+
+【Testbench 编写规范 - 严格遵守】
+1. **使用简单直接的测试逻辑**，不要定义复杂的结构体或类
+2. 必须包含以下头文件:
+   ```cpp
+   #include "V{MODULE_NAME}.h"
+   #include "verilated.h"
+   #include "verilated_vcd_c.h"
+   #include <iostream>
+   ```
+3. **【重要】VCD 波形文件必须命名为 `waveform.vcd`**
+4. **【重要】换行符必须使用 `std::endl`**（两个冒号），不要写成 `stdendl`
+5. 测试通过输出 "TEST PASSED"，失败输出 "TEST FAILED"
+6. 代码包含在 ```cpp ... ``` 代码块中
+7. **不要定义 struct 或 class**，直接在 main 函数中写测试逻辑
+
+【标准 Testbench 模板 - 请严格按此格式】
+```cpp
+#include "V{MODULE_NAME}.h"
+#include "verilated.h"
+#include "verilated_vcd_c.h"
+#include <iostream>
+
+int main(int argc, char** argv) {
+    Verilated::commandArgs(argc, argv);
+    Verilated::traceEverOn(true);
+    
+    V{MODULE_NAME}* top = new V{MODULE_NAME};
+    VerilatedVcdC* tfp = new VerilatedVcdC;
+    top->trace(tfp, 99);
+    tfp->open("waveform.vcd");
+    
+    int sim_time = 0;
+    int errors = 0;
+    
+    // 复位
+    top->clock = 0;
+    top->reset = 1;
+    for (int i = 0; i < 10; i++) {
+        top->clock = !top->clock;
+        top->eval();
+        tfp->dump(sim_time++);
+    }
+    top->reset = 0;
+    
+    // 测试: 直接设置输入，检查输出
+    for (int cycle = 0; cycle < 100; cycle++) {
+        top->clock = 0;
+        top->eval();
+        tfp->dump(sim_time++);
+        
+        top->clock = 1;
+        top->eval();
+        tfp->dump(sim_time++);
+        
+        // 在这里添加输入激励和输出检查
+    }
+    
+    tfp->close();
+    delete tfp;
+    delete top;
+    
+    if (errors == 0) {
+        std::cout << "TEST PASSED" << std::endl;
+        return 0;
+    } else {
+        std::cout << "TEST FAILED with " << errors << " errors" << std::endl;
+        return 1;
+    }
+}
+```
+
+请根据模块的 IO 接口生成简单直接的测试代码。
+"""
+
 
 # ==================== Provider 配置 ====================
 PROVIDER_CONFIGS = {

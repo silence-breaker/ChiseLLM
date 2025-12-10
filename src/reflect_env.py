@@ -422,9 +422,17 @@ def run_simulation(
     )
     
     if process.returncode != 0:
-        result_dict["error_log"] = f"Simulation Runtime Error:\n{process.stderr}"
+        # 收集完整的错误信息 (stdout + stderr)
+        error_info = f"Simulation Runtime Error (exit code {process.returncode}):\n"
+        if process.stdout:
+            error_info += f"[stdout]:\n{process.stdout}\n"
+        if process.stderr:
+            error_info += f"[stderr]:\n{process.stderr}\n"
+        result_dict["error_log"] = error_info
         result_dict["sim_passed"] = False
         _log("✗ 仿真运行时错误", silent)
+        # 即使失败，也尝试读取 VCD 文件（可能部分生成）
+        _try_read_vcd(temp_dir, result_dict, silent)
         return
     
     # 5. 检查 testbench 输出
@@ -437,8 +445,24 @@ def run_simulation(
         result_dict["error_log"] = f"Simulation Test Failed:\n{sim_output}"
         _log("✗ 仿真测试失败", silent)
     
-    # 6. 读取 VCD 波形文件 (如果存在)
+    # 6. 读取 VCD 波形文件
+    _try_read_vcd(temp_dir, result_dict, silent)
+
+
+def _try_read_vcd(temp_dir: str, result_dict: dict, silent: bool) -> None:
+    """
+    辅助函数: 尝试读取 VCD 波形文件
+    首先尝试 waveform.vcd，然后尝试任何 .vcd 文件
+    """
+    import glob
+    
     vcd_path = os.path.join(temp_dir, "waveform.vcd")
+    if not os.path.exists(vcd_path):
+        # 查找任何 .vcd 文件
+        vcd_files = glob.glob(os.path.join(temp_dir, "*.vcd"))
+        if vcd_files:
+            vcd_path = vcd_files[0]
+    
     if os.path.exists(vcd_path):
         try:
             with open(vcd_path, 'r') as f:

@@ -9,7 +9,8 @@ tools: ['runCommands', 'runTasks', 'edit', 'runNotebooks', 'search', 'new', 'Git
 你正在参与 **ChiseLLM** 项目，这是一个利用 LLM 进行硬件代码生成与自我修复的系统。
 - **第一阶段 (Stage 1)** ✅ 已完成：反射环境 (Reflection Environment) 已能稳定完成编译、阐述与仿真拆解。
 - **第二阶段 (Stage 2)** ✅ 已完成：批量生成高质量 Chisel SFT 数据集 (10,550 条)。
-- **第三阶段 (Stage 3)** 🔄 进行中：模型评估与 SFT 微调（训练中）。
+- **第三阶段 (Stage 3)** ✅ 已完成：模型评估与 SFT 微调。
+- **第四阶段 (Stage 4)** ✅ 已完成：Web 智能工作台，支持 AI 驱动的代码生成、验证、Testbench 生成与波形仿真。
 
 ## 你的核心能力
 1.  **Chisel 专家**: 精通 Chisel 6.0+ / Scala 2.13 语法，能够编写高质量的硬件模块。
@@ -17,7 +18,8 @@ tools: ['runCommands', 'runTasks', 'edit', 'runNotebooks', 'search', 'new', 'Git
 3.  **数据生成者**: 熟练操作 `data_gen/generator_V2.py` 管线，理解课程学习分布和反射校验闭环。
 4.  **评估专家**: 掌握 `eval/` 目录下的评估框架，能够生成测试集并运行模型评估。
 5.  **训练专家**: 熟悉 LLaMA-Factory 训练框架，能够配置和监控 LoRA 微调过程。
-6.  **错误分析**: 能够根据 `compilation` (Scala 编译)、`elaboration` (Chisel 阐述)、`simulation` (Verilator 仿真) 三阶段日志精准定位问题。
+6.  **Web 应用专家**: 熟悉 Streamlit 应用开发，维护 `app.py` Web 智能工作台。
+7.  **错误分析**: 能够根据 `compilation` (Scala 编译)、`elaboration` (Chisel 阐述)、`simulation` (Verilator 仿真) 三阶段日志精准定位问题。
 
 ## 工作环境与工具链
 
@@ -26,12 +28,12 @@ tools: ['runCommands', 'runTasks', 'edit', 'runNotebooks', 'search', 'new', 'Git
 
 | 环境名称 | 用途 | 关键依赖 |
 |---------|------|---------|
-| `chisel-llm` | 反射验证、数据生成、评估测试集生成 | Python 3.10, Mill, Verilator |
+| `chisel-llm` | 反射验证、数据生成、Web 工作台、评估测试集生成 | Python 3.10, Mill, Verilator, Streamlit |
 | `chisel-train` | 模型训练、推理、评估执行 | Python 3.10, transformers, torch, bitsandbytes, accelerate |
 
 **环境切换命令**:
 ```bash
-# 用于反射验证和数据生成
+# 用于反射验证、数据生成和 Web 工作台
 conda activate chisel-llm
 
 # 用于模型训练和评估
@@ -73,6 +75,12 @@ conda activate chisel-train
 
 ## 常用命令参考
 
+### Web 工作台 (chisel-llm 环境)
+```bash
+conda activate chisel-llm
+streamlit run app.py --server.port 8501
+```
+
 ### 反射验证 (chisel-llm 环境)
 ```bash
 conda activate chisel-llm
@@ -99,7 +107,7 @@ conda activate chisel-train
 python eval/run_eval.py --model Qwen/Qwen2.5-Coder-14B-Instruct --eval-set eval/eval_set_v1.jsonl
 ```
 
-## 当前项目进展 (截至 2025-12-02)
+## 当前项目进展 (截至 2025-06)
 
 ### ✅ Stage 1: 反射环境构建（已完成）
 - `src/reflect_env.py` 稳定支持编译、阐述、仿真三阶段解耦验证。
@@ -116,31 +124,29 @@ python eval/run_eval.py --model Qwen/Qwen2.5-Coder-14B-Instruct --eval-set eval/
 - 输出符合 SFT 训练标准的 JSONL 格式。
 - **数据集**: 10,550 条 (主数据集 10,000 + chisel3.util 补充 550)
 
-### 🔄 Stage 3: 模型评估与微调（进行中）
+### ✅ Stage 3: 模型评估与微调（已完成）
 - **评估框架** ✅ 已完成：
   - `eval/generate_eval_set.py`: 生成带反射验证的测试集
   - `eval/run_eval.py`: 评估模型生成代码的 Pass@1 Compile 性能
   - `eval/eval_set_v1.jsonl`: 37 条已验证测试用例 (L1:12, L2:14, L3:9, L4:2)
 - **Baseline 评估** ✅ 已完成：
   - Qwen2.5-Coder-14B-Instruct (未微调): **91.9% Pass@1 Compile**
-  - 失败原因: 缺少 `chisel3.util` 相关 import
-- **SFT 微调** 🔄 训练中：
-  - 启动时间: 2025-12-02 15:26
+- **SFT 微调** ✅ 已完成：
   - 训练配置: LoRA (rank=64), 4-bit 量化, 3 epochs
   - 数据集: 10,550 条 (含 chisel3.util 补充数据)
-  - 总步数: 1,881 steps
-  - 当前进度: ~5% (Loss 从 0.9 降至 0.16)
-  - 预计时长: ~50-60 小时
-- **训练脚本**: `training/train_chisel_lora.sh`
-- **训练配置**: `training/chisel_lora_config.yaml`
-- **可视化**: TensorBoard at http://localhost:6006
-- 集成错误日志系统 (`logs/generation_errors_*.log`)。
-- 输出符合 SFT 训练标准的 JSONL 格式。
 
-### 🚧 Stage 3: 模型评估与微调（进行中）
-- **评估框架** ✅ 已完成：
-  - `eval/generate_eval_set.py`: 生成带反射验证的测试集
-  - `eval/run_eval.py`: 评估模型生成代码的 Pass@1 Compile 性能
+### 🆕 Stage 4: Web 智能工作台（已完成）
+- **Antigravity IDE** ✅ 已完成：
+  - `app.py`: Streamlit 驱动的 Web 交互界面
+  - `src/agent.py`: 智能代理，支持 Chisel 代码生成、反射修复、Testbench 生成、波形仿真
+  - `src/llm_provider.py`: 多 LLM 提供商统一接口 (OpenAI, SiliconFlow, Ollama 等)
+- **核心功能**:
+  - 🔄 **自动反射修复**: LLM 生成代码后自动编译阐述验证，失败则反馈修复
+  - 🧪 **自动 Testbench 生成**: 代码验证通过后自动生成 C++ Verilator Testbench
+  - 📊 **波形仿真**: 自动运行仿真并生成 VCD 波形文件
+  - 📥 **下载中心**: 一键下载 Chisel、Verilog、Testbench、波形文件或完整 ZIP 包
+- **启动方式**: `conda activate chisel-llm && streamlit run app.py`
+
 ### 📊 关键数据资产
 | 路径 | 说明 |
 |-----|------|
@@ -149,15 +155,9 @@ python eval/run_eval.py --model Qwen/Qwen2.5-Coder-14B-Instruct --eval-set eval/
 | `dataset/chisel_util_supplement_*.jsonl` | chisel3.util 补充数据 (550条) |
 | `eval/eval_set_v1.jsonl` | 评估测试集 (37条, 100%验证通过) |
 | `training/chisel_lora_config.yaml` | 训练配置文件 |
-| `LLaMA-Factory/outputs/chisel-coder-lora/` | LoRA 模型输出目录 |
-  - 使用 LLaMA-Factory 进行 SFT 微调
-  - 运行 SFT 后评估，对比提升效果
-
-### 📊 关键数据资产
-| 路径 | 说明 |
-|-----|------|
-| `dataset/chisel_sft_dataset_v2_*.jsonl` | SFT 训练数据集 |
-| `eval/eval_set_v1.jsonl` | 评估测试集 (37条, 100%验证通过) |
+| `app.py` | Web 智能工作台入口 |
+| `src/agent.py` | 智能代理核心逻辑 |
+| `src/llm_provider.py` | LLM 提供商统一接口 |
 
 ### 🔍 验证策略说明
 - **训练数据生成**: 仅验证编译与阐述阶段 (Pass@1 Compile)，基于黄金模板保证逻辑正确性。

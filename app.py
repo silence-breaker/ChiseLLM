@@ -159,6 +159,8 @@ if "last_result" not in st.session_state:
     st.session_state.last_result = None
 if "last_code" not in st.session_state:
     st.session_state.last_code = None
+if "last_testbench" not in st.session_state:
+    st.session_state.last_testbench = None
 
 # ==================== 主界面 ====================
 col_chat, col_code = st.columns([1, 1])
@@ -198,6 +200,7 @@ with col_chat:
                 st.stop()
             
             response_content = ""
+            testbench_code = None
             
             for step in agent.run_loop(prompt):
                 if step["status"] == "generating":
@@ -206,6 +209,26 @@ with col_chat:
                     status_box.write(f"🔨 {step['msg']}")
                 elif step["status"] == "fixing":
                     status_box.write(f"🚑 {step['msg']}")
+                elif step["status"] == "elaboration_passed":
+                    status_box.write(f"✅ {step['msg']}")
+                elif step["status"] == "generating_tb":
+                    status_box.write(f"🧪 {step['msg']}")
+                elif step["status"] == "fixing_tb":
+                    status_box.write(f"🔧 {step['msg']}")
+                elif step["status"] == "tb_generated":
+                    status_box.write(f"📝 {step['msg']}")
+                elif step["status"] == "tb_error":
+                    status_box.write(f"⚠️ {step['msg']}")
+                elif step["status"] == "tb_compile_error":
+                    status_box.write(f"🔧 {step['msg']}")
+                elif step["status"] == "tb_fix_failed":
+                    status_box.write(f"⚠️ {step['msg']}")
+                elif step["status"] == "simulating":
+                    status_box.write(f"🌊 {step['msg']}")
+                elif step["status"] == "sim_passed":
+                    status_box.write(f"✅ {step['msg']}")
+                elif step["status"] == "sim_failed":
+                    status_box.write(f"⚠️ {step['msg']}")
                 elif step["status"] == "error":
                     status_box.update(label="❌ 发生错误", state="error")
                     st.error(step["msg"])
@@ -215,6 +238,7 @@ with col_chat:
                     response_content = step["raw_response"]
                     st.session_state.last_result = step["result"]
                     st.session_state.last_code = step["code"]
+                    st.session_state.last_testbench = step.get("testbench_code")
                 elif step["status"] == "failed":
                     status_box.update(label="💀 任务失败，已显示最后一次错误报告", state="error")
                     st.error(step["msg"])
@@ -235,11 +259,13 @@ with col_code:
     if st.session_state.get("last_result"):
         result = st.session_state.last_result
         code = st.session_state.last_code
+        testbench = st.session_state.last_testbench or result.get("testbench_code")
         module_name = result.get("module_name", "Module")
         
-        tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
             "📐 Chisel 源码", 
-            "📝 Verilog", 
+            "📝 Verilog",
+            "🧪 Testbench",
             "🌊 波形仿真",
             "📊 验证报告",
             "📦 下载中心"
@@ -255,6 +281,14 @@ with col_code:
                 st.info("未生成 Verilog (elaboration 失败)")
         
         with tab3:
+            # Testbench 显示
+            if testbench:
+                st.success("✅ C++ Testbench 已生成")
+                st.code(testbench, language="cpp")
+            else:
+                st.info("💡 Testbench 将在代码验证通过后自动生成")
+        
+        with tab4:
             # 波形可视化
             if result.get("vcd_content"):
                 st.success("✅ 仿真波形已生成")
@@ -262,6 +296,7 @@ with col_code:
                 # 使用 vcd_parser 转换并渲染
                 try:
                     import tempfile
+                    import os
                     import streamlit.components.v1 as components
                     from src.vcd_parser import vcd_to_wavedrom, generate_wavedrom_html
                     
@@ -270,32 +305,50 @@ with col_code:
                         f.write(result["vcd_content"])
                         temp_vcd_path = f.name
                     
-                    # 转换为 WaveDrom JSON
-                    wavedrom_json = vcd_to_wavedrom(temp_vcd_path, max_cycles=50)
-                    
-                    if "error" not in wavedrom_json:
-                        # 生成 HTML 并嵌入
-                        html_content = generate_wavedrom_html(wavedrom_json, height=400)
-                        components.html(html_content, height=450, scrolling=True)
-                    else:
-                        st.warning(f"波形解析警告: {wavedrom_json.get('error')}")
-                        st.info("显示原始 VCD 文件内容 (前 2000 字符)")
-                        st.code(result["vcd_content"][:2000], language="text")
+                    try:
+                        # 转换为 WaveDrom JSON
+                        wavedrom_json = vcd_to_wavedrom(temp_vcd_path, max_cycles=25)
+                        
+                        # 检查返回值类型和错误
+                        if isinstance(wavedrom_json, dict) and "error" not in wavedrom_json:
+                            # 生成 HTML 并嵌入
+                            html_content = generate_wavedrom_html(wavedrom_json, height=400)
+                            components.html(html_content, height=450, scrolling=True)
+                        elif isinstance(wavedrom_json, dict) and "error" in wavedrom_json:
+                            st.warning(f"波形解析警告: {wavedrom_json.get('error')}")
+                            st.info("显示原始 VCD 文件内容 (前 2000 字符)")
+                            st.code(result["vcd_content"][:2000], language="text")
+                        else:
+                            st.warning(f"波形解析返回了意外的数据类型: {type(wavedrom_json).__name__}")
+                            st.info("显示原始 VCD 文件内容 (前 2000 字符)")
+                            st.code(result["vcd_content"][:2000], language="text")
+                    finally:
+                        # 清理临时文件
+                        if os.path.exists(temp_vcd_path):
+                            os.unlink(temp_vcd_path)
                         
                 except Exception as e:
                     st.error(f"波形渲染失败: {str(e)}")
                     st.info("显示原始 VCD 文件")
                     st.code(result["vcd_content"][:2000], language="text")
             else:
-                st.info("💡 波形仿真需要提供 Testbench 文件")
-                st.markdown("""
-                **如何生成波形：**
-                1. 准备 C++ Testbench 文件
-                2. 在反射验证时指定 testbench 路径
-                3. 仿真完成后自动生成 VCD 波形
-                """)
+                st.info("💡 波形将在 Testbench 仿真完成后自动生成")
+                if testbench:
+                    st.warning("Testbench 已生成但仿真可能未成功完成")
+                    # 显示仿真调试信息
+                    with st.expander("🔍 仿真调试信息", expanded=True):
+                        st.write(f"**sim_passed**: `{result.get('sim_passed')}`")
+                        st.write(f"**sim_stage**: `{result.get('sim_stage')}`")
+                        st.write(f"**stage**: `{result.get('stage')}`")
+                        st.write(f"**vcd_content 存在**: `{bool(result.get('vcd_content'))}`")
+                        if result.get('sim_error_log'):
+                            st.error("仿真错误日志:")
+                            st.code(result['sim_error_log'][:3000], language="text")
+                        elif result.get('error_log'):
+                            st.error("错误日志:")
+                            st.code(result['error_log'][:3000], language="text")
         
-        with tab4:
+        with tab5:
             # 验证状态
             if result['elaborated']:
                 st.success("✅ Elaboration Passed")
@@ -306,15 +359,17 @@ with col_code:
                 st.success("✅ Simulation Passed")
             elif result.get('sim_passed') is False:
                 st.error("❌ Simulation Failed")
+            else:
+                st.info("ℹ️ 仿真未执行或正在进行中")
             
             # 显示详细报告
             with st.expander("📋 详细报告"):
                 # 过滤掉过大的字段
                 display_result = {k: v for k, v in result.items() 
-                                  if k not in ["vcd_content", "full_stdout", "full_stderr"]}
+                                  if k not in ["vcd_content", "full_stdout", "full_stderr", "testbench_code"]}
                 st.json(display_result)
         
-        with tab5:
+        with tab6:
             # 下载中心
             st.markdown("### 📥 下载中心")
             
@@ -339,6 +394,16 @@ with col_code:
                         mime="text/plain",
                         use_container_width=True
                     )
+                
+                # Testbench
+                if testbench:
+                    st.download_button(
+                        "⬇️ Testbench (.cpp)",
+                        testbench,
+                        file_name=f"tb_{module_name}.cpp",
+                        mime="text/plain",
+                        use_container_width=True
+                    )
             
             with col_dl2:
                 # VCD 波形
@@ -360,6 +425,8 @@ with col_code:
                     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
                         zf.writestr(f"{module_name}.scala", code)
                         zf.writestr(f"{module_name}.v", result["generated_verilog"])
+                        if testbench:
+                            zf.writestr(f"tb_{module_name}.cpp", testbench)
                         if result.get("vcd_content"):
                             zf.writestr(f"{module_name}.vcd", result["vcd_content"])
                         # 添加 README
@@ -370,6 +437,7 @@ Generated by ChiseLLM
 ## Files
 - {module_name}.scala - Chisel source code
 - {module_name}.v - Generated Verilog
+{"- tb_" + module_name + ".cpp - C++ Testbench (Verilator)" if testbench else ""}
 {"- " + module_name + ".vcd - Simulation waveform" if result.get("vcd_content") else ""}
 
 ## Verification Status
