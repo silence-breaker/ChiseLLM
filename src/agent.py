@@ -98,6 +98,21 @@ class ChiselAgent:
         code = re.sub(r'\bstd:endl\b', 'std::endl', code)
         # 修复 std::end -> std::endl (缺少 l)
         code = re.sub(r'\bstd::end\b(?!l)', 'std::endl', code)
+        
+        # 检查是否有正确的时钟翻转逻辑
+        # 如果只有很少的循环次数，警告一下 (但不自动修复，因为可能破坏逻辑)
+        loop_match = re.search(r'for\s*\([^;]+;\s*\w+\s*<\s*(\d+)\s*;', code)
+        if loop_match:
+            loop_count = int(loop_match.group(1))
+            if loop_count < 20:
+                # 尝试增加循环次数到至少 50
+                code = re.sub(
+                    r'(for\s*\([^;]+;\s*\w+\s*<\s*)\d+(\s*;)',
+                    r'\g<1>50\2',
+                    code,
+                    count=1  # 只修改第一个主循环
+                )
+        
         return code
 
     def infer_module_name(self, code: str) -> str:

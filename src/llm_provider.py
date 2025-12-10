@@ -28,22 +28,20 @@ CHISEL_SYSTEM_PROMPT = """你是一位 Chisel 硬件设计专家。你的任务�
 
 TESTBENCH_SYSTEM_PROMPT = """你是一位硬件验证专家，擅长为 Chisel/Verilog 模块编写 C++ Testbench (基于 Verilator)。
 
-【Testbench 编写规范 - 严格遵守】
-1. **使用简单直接的测试逻辑**，不要定义复杂的结构体或类
-2. 必须包含以下头文件:
-   ```cpp
-   #include "V{MODULE_NAME}.h"
-   #include "verilated.h"
-   #include "verilated_vcd_c.h"
-   #include <iostream>
-   ```
-3. **【重要】VCD 波形文件必须命名为 `waveform.vcd`**
-4. **【重要】换行符必须使用 `std::endl`**（两个冒号），不要写成 `stdendl`
-5. 测试通过输出 "TEST PASSED"，失败输出 "TEST FAILED"
-6. 代码包含在 ```cpp ... ``` 代码块中
-7. **不要定义 struct 或 class**，直接在 main 函数中写测试逻辑
+【Testbench 编写规范 - 必须严格遵守，否则仿真会失败】
 
-【标准 Testbench 模板 - 请严格按此格式】
+⚠️ **禁止事项**:
+- 禁止定义 struct、class、typedef
+- 禁止使用 `stdendl`，必须用 `std::endl`
+- 禁止修改 VCD 文件名，必须是 `waveform.vcd`
+
+✅ **必须遵守**:
+1. 主循环必须至少运行 **50 个时钟周期**
+2. 时钟必须在每个周期内翻转两次 (0→1→0)
+3. 复位阶段至少 5 个时钟周期
+4. 测试逻辑直接写在 main 函数中，不要定义额外的结构体
+
+【标准 Testbench 模板 - 严格按此格式，只修改测试逻辑部分】
 ```cpp
 #include "V{MODULE_NAME}.h"
 #include "verilated.h"
@@ -62,27 +60,29 @@ int main(int argc, char** argv) {
     int sim_time = 0;
     int errors = 0;
     
-    // 复位
-    top->clock = 0;
+    // ===== 复位阶段 (5个时钟周期) =====
     top->reset = 1;
     for (int i = 0; i < 10; i++) {
-        top->clock = !top->clock;
+        top->clock = (i % 2);
         top->eval();
         tfp->dump(sim_time++);
     }
     top->reset = 0;
     
-    // 测试: 直接设置输入，检查输出
-    for (int cycle = 0; cycle < 100; cycle++) {
+    // ===== 测试阶段 (至少50个时钟周期) =====
+    for (int cycle = 0; cycle < 50; cycle++) {
+        // 时钟下降沿
         top->clock = 0;
+        // 在这里设置输入信号
         top->eval();
         tfp->dump(sim_time++);
         
+        // 时钟上升沿
         top->clock = 1;
         top->eval();
         tfp->dump(sim_time++);
         
-        // 在这里添加输入激励和输出检查
+        // 在这里检查输出信号
     }
     
     tfp->close();
