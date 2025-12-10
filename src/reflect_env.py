@@ -361,6 +361,7 @@ def run_simulation(
     verilator_cmd = [
         "verilator",
         "-cc",                  # 生成 C++ 代码
+        "--trace",              # 启用 VCD 波形生成
         "-Wno-UNUSED",          # 忽略未使用信号的警告
         "-Wno-lint",            # 忽略 lint 警告
         "--exe",                # 创建可执行文件
@@ -435,6 +436,16 @@ def run_simulation(
         result_dict["sim_passed"] = False
         result_dict["error_log"] = f"Simulation Test Failed:\n{sim_output}"
         _log("✗ 仿真测试失败", silent)
+    
+    # 6. 读取 VCD 波形文件 (如果存在)
+    vcd_path = os.path.join(temp_dir, "waveform.vcd")
+    if os.path.exists(vcd_path):
+        try:
+            with open(vcd_path, 'r') as f:
+                result_dict["vcd_content"] = f.read()
+            _log("✓ VCD 波形文件已生成", silent)
+        except IOError:
+            pass
 
 
 def _read_logs(temp_dir: str, result_dict: dict) -> None:

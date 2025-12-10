@@ -1,69 +1,84 @@
+"""
+ChiseLLM Agent - 使用统一的 LLM Provider 接口
 
-import re
-import time  # ✅ 新增
-import google.generativeai as genai
-from src.reflect_env import reflect
-# 系统提示词 (保持不变)
-SYSTEM_PROMPT = """
-你是一位 Chisel 硬件设计专家。你的任务是根据用户需求编写 Chisel 代码。
-【严重警告：版本与语法约束】
-1. 必须使用 Chisel 6.0.0 和 Scala 2.13.12 语法。
-2. 必须导入: `import chisel3._` 和 `import chisel3.util._`
-3. 模块必须继承 `Module`。
-4. IO 必须包裹在 `IO(...)` 中，例如 `val io = IO(...)`。
-5. 所有代码必须包含在一个 Markdown 代码块中 (```scala ... ```)。
-6. 仅输出 Module 定义，不要包含 package 声明。
+重构版本，支持多种 LLM API。
 """
 
-class ChiselAgent:
-    def __init__(self, api_key, model_name="gemini-1.5-flash"):
-        # 配置 Google API
-        genai.configure(api_key=api_key)
-        
-        # 初始化模型 (支持系统提示词)
-        self.model = genai.GenerativeModel(
-            model_name=model_name,
-            system_instruction=SYSTEM_PROMPT
-        )
-        
-        # 初始化聊天历史
-        self.chat = self.model.start_chat(history=[])
+import re
+import time
+from src.llm_provider import LLMProvider, create_provider
+from src.reflect_env import reflect
 
-    def extract_code(self, text):
+
+class ChiselAgent:
+    """Chisel 代码生成 Agent"""
+    
+    def __init__(self, provider: LLMProvider):
+        """
+        初始化 ChiselAgent
+        
+        Args:
+            provider: LLM Provider 实例 (通过 create_provider 创建)
+        """
+        self.provider = provider
+    
+    @classmethod
+    def from_config(
+        cls,
+        provider_type: str,
+        api_key: str,
+        model_name: str = None,
+        base_url: str = None
+    ) -> "ChiselAgent":
+        """
+        从配置创建 ChiselAgent (便捷方法)
+        
+        Args:
+            provider_type: Provider 类型 (gemini, openai, qwen, deepseek, claude, custom)
+            api_key: API Key
+            model_name: 模型名称 (可选)
+            base_url: API Base URL (仅对 custom 类型必需)
+        
+        Returns:
+            ChiselAgent 实例
+        """
+        provider = create_provider(
+            provider_type=provider_type,
+            api_key=api_key,
+            model_name=model_name,
+            base_url=base_url
+        )
+        return cls(provider=provider)
+
+    def extract_code(self, text: str) -> str:
+        """从 LLM 响应中提取 Scala/Chisel 代码"""
         match = re.search(r"```scala(.*?)```", text, re.DOTALL)
         if match:
             return match.group(1).strip()
         return text
 
-    def infer_module_name(self, code):
+    def infer_module_name(self, code: str) -> str:
+        """从代码中推断模块名称"""
         match = re.search(r"class\s+(\w+)\s+extends\s+Module", code)
         if match:
             return match.group(1)
         return "TestModule"
 
-    def run_loop(self, user_request, max_retries=3):
-        """核心生成-修复闭环"""
+    def run_loop(self, user_request: str, max_retries: int = 3):
+        """
+        核心生成-修复闭环
         
-  # ... 在 run_loop 函数内部 ...
+        Yields:
+            dict: 包含 status, msg, code, result, raw_response 等字段
+        """
         
         # 1. 首次生成
-        yield {"status": "generating", "msg": "正在调用 Gemini 原生接口生成代码..."}
+        yield {"status": "generating", "msg": "正在调用 LLM 生成代码..."}
         
         try:
-            # ✅ 新增：简单的重试机制
-            try:
-                response = self.chat.send_message(user_request)
-            except Exception as e:
-                if "429" in str(e):
-                    yield {"status": "generating", "msg": "触发限流，正在冷却 5 秒..."}
-                    time.sleep(5) # 休息一下
-                    response = self.chat.send_message(user_request) # 再试一次
-                else:
-                    raise e # 其他错误直接抛出
-
-            content = response.text
+            content = self.provider.send_message(user_request)
         except Exception as e:
-            yield {"status": "error", "msg": f"Google API 调用失败: {str(e)}"}
+            yield {"status": "error", "msg": f"API 调用失败: {str(e)}"}
             return
 
         for attempt in range(1, max_retries + 1):
@@ -76,7 +91,8 @@ class ChiselAgent:
             result = reflect(
                 chisel_code_string=code,
                 module_name=module_name,
-                testbench_path=None
+                testbench_path=None,
+                silent=True
             )
 
             # 3. 成功判定
@@ -88,7 +104,7 @@ class ChiselAgent:
             error_msg = result['error_log'] if result['error_log'] else "Unknown Error"
             short_error = error_msg[:2000] + "..." if len(error_msg) > 2000 else error_msg
             
-            yield {"status": "fixing", "msg": f"发现错误 (阶段: {result['stage']})，正在让 Gemini 自愈..."}
+            yield {"status": "fixing", "msg": f"发现错误 (阶段: {result['stage']})，正在让 LLM 自愈..."}
             
             feedback = f"""
             你生成的代码在 {result['stage']} 阶段验证失败。
@@ -98,10 +114,9 @@ class ChiselAgent:
             请分析错误原因，并修复代码。请输出完整的修复后代码。
             """
             
-            # 将错误反馈发回给模型 (Gemini 会自动维护 history)
+            # 将错误反馈发回给模型
             try:
-                response = self.chat.send_message(feedback)
-                content = response.text
+                content = self.provider.send_message(feedback)
             except Exception as e:
                 yield {"status": "error", "msg": f"修复过程 API 调用失败: {str(e)}"}
                 return

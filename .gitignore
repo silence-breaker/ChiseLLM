@@ -40,6 +40,9 @@ temp/
 *.tmp
 *.log
 
+# Streamlit secrets (敏感信息)
+.streamlit/secrets.toml
+
 # Scala/sbt/Mill
 target/
 project/target/
