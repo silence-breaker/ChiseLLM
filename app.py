@@ -28,35 +28,50 @@ st.caption("AI 驱动的 Chisel 硬件设计生成与验证平台")
 with st.sidebar:
     st.header("🔧 API 配置")
     
-    # 检查是否有默认配置 (服务器端预设的测试 API)
-    has_default = hasattr(st, 'secrets') and 'default' in st.secrets
+    # 安全地检查是否有服务器预设的测试 API
+    def check_has_default():
+        try:
+            return hasattr(st, 'secrets') and 'default' in st.secrets and st.secrets["default"].get("api_key")
+        except:
+            return False
     
-    # 使用测试配置的开关 - 允许外部用户使用预设 API
+    has_default = check_has_default()
+    
+    # 使用测试配置的开关 - 始终可用，让用户可以尝试
     use_default = st.checkbox(
         "🚀 使用测试配置", 
-        value=has_default,
-        help="使用服务器预设的测试 API，无需自行配置" if has_default else "服务器未配置测试 API",
-        disabled=not has_default
+        value=has_default,  # 如果有配置，默认勾选
+        help="使用服务器预设的测试 API，无需自行配置"
     )
     
     # ========== 测试配置模式 ==========
-    if use_default and has_default:
-        # 从 secrets 加载配置 (用户看不到具体内容)
-        api_key = st.secrets["default"]["api_key"]
-        base_url = st.secrets["default"]["base_url"]
-        model_name = st.secrets["default"]["model_name"]
-        provider_type = "custom"  # SiliconFlow 使用 custom 类型
-        display_provider_type = "siliconflow"
-        
-        # 显示友好的配置摘要 (不暴露敏感信息)
-        st.info("📡 **测试模式已启用**")
-        st.markdown(f"""
-        - **API**: SiliconFlow  
-        - **模型**: `{model_name.split('/')[-1]}`  
-        - **状态**: ✅ 已就绪
-        """)
-        
-        st.caption("💡 测试配置由服务器提供，可直接使用")
+    if use_default:
+        if has_default:
+            # 从 secrets 加载配置 (用户看不到具体内容)
+            api_key = st.secrets["default"]["api_key"]
+            base_url = st.secrets["default"]["base_url"]
+            model_name = st.secrets["default"]["model_name"]
+            provider_type = "custom"  # SiliconFlow 使用 custom 类型
+            display_provider_type = "siliconflow"
+            
+            # 显示友好的配置摘要 (不暴露敏感信息)
+            st.info("📡 **测试模式已启用**")
+            st.markdown(f"""
+            - **API**: SiliconFlow  
+            - **模型**: `{model_name.split('/')[-1]}`  
+            - **状态**: ✅ 已就绪
+            """)
+            
+            st.caption("💡 测试配置由服务器提供，可直接使用")
+        else:
+            # 服务器没有配置测试 API
+            st.error("❌ 服务器未配置测试 API")
+            st.caption("请取消勾选，使用自定义 API 配置")
+            api_key = None
+            base_url = None
+            model_name = None
+            provider_type = "gemini"
+            display_provider_type = "gemini"
         
     # ========== 自定义配置模式 ==========
     else:
