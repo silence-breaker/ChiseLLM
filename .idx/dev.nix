@@ -14,7 +14,7 @@
       pkgs.verilator
       pkgs.gnumake
       pkgs.gcc
-      
+      pkgs.python311Packages.pyngrok
       # 👇👇👇 核心修复：添加 CIRCT 工具链 (包含 firtool)
       pkgs.circt 
     ];
