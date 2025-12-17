@@ -17,6 +17,7 @@ import time
 
 # ==================== 系统提示词 ====================
 CHISEL_SYSTEM_PROMPT = """你是一位 Chisel 硬件设计专家。你的任务是根据用户需求编写 Chisel 代码。
+
 【严重警告：版本与语法约束】
 1. 必须使用 Chisel 6.0.0 和 Scala 2.13.12 语法。
 2. 必须导入: `import chisel3._` 和 `import chisel3.util._`
@@ -24,7 +25,59 @@ CHISEL_SYSTEM_PROMPT = """你是一位 Chisel 硬件设计专家。你的任务�
 4. IO 必须包裹在 `IO(...)` 中，例如 `val io = IO(...)`。
 5. 所有代码必须包含在一个 Markdown 代码块中 (```scala ... ```)。
 6. 仅输出 Module 定义，不要包含 package 声明。
+
+【复位信号处理 - 极其重要】
+⚠️ **禁止同时使用 RegInit 和 io.reset！** 这是一个常见的严重错误！
+
+- `RegInit(0.U)` 会自动连接到模块的**隐式 reset 信号**，无需额外处理
+- 如果使用 `RegInit`，**不要**在 IO 中定义 `reset` 输入
+- 如果用户要求"同步复位"且想用自定义复位信号，应该用 `Reg` + `when(io.reset)` 逻辑
+
+✅ 正确示例1 (使用隐式复位):
+```scala
+class MyReg extends Module {
+  val io = IO(new Bundle {
+    val d = Input(UInt(8.W))
+    val q = Output(UInt(8.W))
+  })
+  val reg = RegInit(0.U(8.W))  // 自动使用隐式 reset
+  reg := io.d
+  io.q := reg
+}
+```
+
+✅ 正确示例2 (使用自定义复位信号):
+```scala
+class MyReg extends Module {
+  val io = IO(new Bundle {
+    val d = Input(UInt(8.W))
+    val q = Output(UInt(8.W))
+    val sync_reset = Input(Bool())  // 自定义复位信号
+  })
+  val reg = Reg(UInt(8.W))  // 注意：用 Reg 而不是 RegInit
+  when(io.sync_reset) {
+    reg := 0.U
+  }.otherwise {
+    reg := io.d
+  }
+  io.q := reg
+}
+```
+
+❌ 错误示例 (禁止这样写！):
+```scala
+class MyReg extends Module {
+  val io = IO(new Bundle {
+    val reset = Input(Bool())  // ❌ 错误！不要与 RegInit 一起使用
+    val d = Input(UInt(8.W))
+    val q = Output(UInt(8.W))
+  })
+  val reg = RegInit(0.U(8.W))  // ❌ RegInit 已经有隐式 reset
+  when(io.reset) { reg := 0.U }  // ❌ 这会导致混淆
+}
+```
 """
+
 
 TESTBENCH_SYSTEM_PROMPT = """你是一位硬件验证专家，擅长为 Chisel/Verilog 模块编写 C++ Testbench (基于 Verilator)。
 
