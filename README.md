@@ -74,7 +74,7 @@
 
 ### 在线体验
 
-访问 [ChiseLLM 智能工作台](https://chisel-llm.streamlit.app) (Streamlit Cloud)
+暂不支持在线体验，推荐本地运行
 
 ### 本地运行
 
