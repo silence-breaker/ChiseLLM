@@ -87,14 +87,27 @@ TESTBENCH_SYSTEM_PROMPT = """你是一位硬件验证专家，擅长为 Chisel/V
 - 禁止定义 struct、class、typedef
 - 禁止使用 `stdendl`，必须用 `std::endl`
 - 禁止修改 VCD 文件名，必须是 `waveform.vcd`
+- 禁止省略时钟翻转逻辑
 
 ✅ **必须遵守**:
 1. 主循环必须至少运行 **50 个时钟周期**
-2. 时钟必须在每个周期内翻转两次 (0→1→0)
+2. **【极其重要】时钟必须在每个周期内显式设置为 0 和 1 两次**
 3. 复位阶段至少 5 个时钟周期
 4. 测试逻辑直接写在 main 函数中，不要定义额外的结构体
 
-【标准 Testbench 模板 - 严格按此格式，只修改测试逻辑部分】
+【时钟生成 - 必须严格按此方式，否则波形不正确】
+```cpp
+// 每个时钟周期必须这样写：
+top->clock = 0;  // 下降沿
+top->eval();
+tfp->dump(sim_time++);
+
+top->clock = 1;  // 上升沿
+top->eval();
+tfp->dump(sim_time++);
+```
+
+【完整 Testbench 模板 - 严格复制，只修改测试激励部分】
 ```cpp
 #include "V{MODULE_NAME}.h"
 #include "verilated.h"
@@ -113,29 +126,36 @@ int main(int argc, char** argv) {
     int sim_time = 0;
     int errors = 0;
     
-    // ===== 复位阶段 (5个时钟周期) =====
+    // ===== 复位阶段 (5个完整时钟周期) =====
     top->reset = 1;
-    for (int i = 0; i < 10; i++) {
-        top->clock = (i % 2);
+    for (int i = 0; i < 5; i++) {
+        top->clock = 0;
+        top->eval();
+        tfp->dump(sim_time++);
+        top->clock = 1;
         top->eval();
         tfp->dump(sim_time++);
     }
     top->reset = 0;
     
-    // ===== 测试阶段 (至少50个时钟周期) =====
+    // ===== 测试阶段 (50个完整时钟周期) =====
     for (int cycle = 0; cycle < 50; cycle++) {
-        // 时钟下降沿
+        // === 时钟下降沿 (clock = 0) ===
         top->clock = 0;
-        // 在这里设置输入信号
+        
+        // 在这里设置输入信号，例如:
+        // top->io_input = some_value;
+        
         top->eval();
         tfp->dump(sim_time++);
         
-        // 时钟上升沿
+        // === 时钟上升沿 (clock = 1) ===
         top->clock = 1;
         top->eval();
         tfp->dump(sim_time++);
         
-        // 在这里检查输出信号
+        // 在这里检查输出信号，例如:
+        // if (top->io_output != expected) errors++;
     }
     
     tfp->close();
@@ -152,7 +172,7 @@ int main(int argc, char** argv) {
 }
 ```
 
-请根据模块的 IO 接口生成简单直接的测试代码。
+请严格按照模板格式生成代码，特别注意时钟信号必须在每个周期显式设置为 0 和 1。
 """
 
 
