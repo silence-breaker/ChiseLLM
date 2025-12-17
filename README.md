@@ -27,6 +27,14 @@
 - 🌊 **波形可视化** - VCD 波形实时渲染（WaveDrom）
 - 🌐 **Web 工作台** - Streamlit 驱动的在线 IDE
 
+### 🖥️ 项目展示
+
+<p align="center">
+  <img src="figures/workstation.png" alt="ChiseLLM 智能工作台" width="100%">
+  <br>
+  <em>ChiseLLM 智能工作台 - AI 驱动的 Chisel 硬件设计平台</em>
+</p>
+
 ---
 
 ## 🏗️ 项目架构
